@@ -6,4 +6,6 @@
 #include <unistd.h>
 #include <string.h>
 
+#define ERROR_PRINTF(x) (printf("ping: %s", x))
+
 #endif
