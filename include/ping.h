@@ -6,8 +6,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include "../libft/libft.h"
 
 #define ERROR_PRINTF(x) (printf("ping: %s", x))
-int	parseInput(char **argv)
+int	parseInput(char **argv);
 
 #endif

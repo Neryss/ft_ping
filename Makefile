@@ -24,7 +24,9 @@ debug: $(NAME)
 
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(MAKE) -C ./libft/
+	cp ./libft/libft.a ./
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -L. -lft
 
 clean:
 	@rm -f $(OBJS)
