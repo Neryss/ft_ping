@@ -17,6 +17,20 @@ int	parseInput(char **argv)
 				}
 				else if (argv[i][k] == 'v')
 					g_params.v_flag = true;
+				else if (argv[i][k] == 'f')
+					g_params.f_flag = true;
+				else if (argv[i][k] == 'n')
+					g_params.n_flag = true;
+				else if (argv[i][k] == 'a')
+					g_params.a_flag = true;
+				else if (argv[i][k] == 'D')
+					g_params.D_flag = true;
+				else
+				{
+					printf("invalid option -- \'%c\'\n", argv[i][k]);
+					printf(HELP_MSG);
+					return (1);
+				}
 				k++;
 			}
 		}

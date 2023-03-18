@@ -10,7 +10,18 @@
 #define ERROR_PRINTF(x) (printf("ping: %s", x))
 #define HELP_MSG "\nUsage\n  ping [options] <destination>\n\nOptions:\n  <destination>      dns name or ip address\n\
   -h                 print help and exit\n\
-  -v                 verbose output\n"
+  -v                 verbose output (TODO)\n\
+  -f                 flood ping (TODO)\n\
+  -m <mark>          tag the packets going out (TODO)\n\
+  -l <preload>       send <preload> number of packages while waiting replies (TODO)\n\
+  -I <interface>     either interface name or address (TODO)\n\
+  -M <opts>          define mtu discovery, can be one of <do|dont|want> (TODO)\n\
+  -n                 no dns name resolution (TODO)\n\
+  -w <deadline>      reply wait <deadline> in seconds (TODO)\n\
+  -W <timeout>       time to wait for response (TODO)\n\
+  -a                 use audible ping (TODO)\n\
+  -D                 print timestamps (TODO)\n\
+  -t <ttl>           define time to live (TODO)\n"
 
 typedef struct	s_params
 {
@@ -26,12 +37,12 @@ typedef struct	s_params
 	bool		a_flag;	// use audible ping (TODO ez)
 	bool		D_flag;	// print timestamps (TODO)
 	bool		t_flag;	// <ttl> define time to live (TODO)
-	bool		T_flag;	// print timestamps (TODO)
 }				t_params;
 
 extern t_params	g_params;
 
 int				parseInput(char **argv);
 void			printParams();
+void			initParams();
 
 #endif
