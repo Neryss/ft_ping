@@ -14,7 +14,19 @@
 
 typedef struct	s_params
 {
-	bool		verbose;
+	bool		v_flag;	// verbose output
+	bool		f_flag;	// flood ping (TODO)
+	bool		m_flag;	// <mark> tag the packets going out (TODO)
+	bool		l_flag;	// send <preload> number of packages while waiting replies (TODO)
+	bool		I_flag;	// <interface> either interface name or address (TODO)
+	bool		M_flag;	// <opts> define mtu discovery, can be one of <do|dont|want> (TODO)
+	bool		n_flag;	// no dns name resolution (TODO)
+	bool		w_flag;	// <deadline> reply wait <deadline> in seconds (TODO)
+	bool		W_flag;	// <timeout> time to wait for response (TODO)
+	bool		a_flag;	// use audible ping (TODO ez)
+	bool		D_flag;	// print timestamps (TODO)
+	bool		t_flag;	// <ttl> define time to live (TODO)
+	bool		T_flag;	// print timestamps (TODO)
 }				t_params;
 
 extern t_params	g_params;

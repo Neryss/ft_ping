@@ -3,5 +3,5 @@
 void	printParams()
 {
 	printf("[===PARAMS===]\n");
-	printf("verbose: %d\n", g_params.verbose);
+	printf("verbose: %d\n", g_params.v_flag);
 }

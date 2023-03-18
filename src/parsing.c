@@ -5,15 +5,20 @@ int	parseInput(char **argv)
 	int	i = 1;
 	while (argv[i])
 	{
-		if (argv[i][0] == '-')
+		int	k = 0;
+		if (argv[i][k++] == '-')
 		{
-			if (argv[i][1] == 'h')
+			while (argv[i][k])
 			{
-				printf(HELP_MSG);
-				return (1);
+				if (argv[i][k] == 'h')
+				{
+					printf(HELP_MSG);
+					return (1);
+				}
+				else if (argv[i][k] == 'v')
+					g_params.v_flag = true;
+				k++;
 			}
-			else if (argv[i][1] == 'v')
-				g_params.verbose = true;
 		}
 		i++;
 	}
