@@ -12,13 +12,14 @@
   -h                 print help and exit\n\
   -v                 verbose output\n"
 
-typedef struct s_params
+typedef struct	s_params
 {
 	bool		verbose;
-	bool		help;
 }				t_params;
 
+extern t_params	g_params;
 
-int	parseInput(char **argv);
+int				parseInput(char **argv);
+void			printParams();
 
 #endif

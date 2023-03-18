@@ -1,5 +1,7 @@
 #include "../include/ping.h"
 
+t_params g_params;
+
 int	main(int argc, char **argv)
 {
 	(void)argv;
@@ -9,5 +11,8 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	parseInput(argv);
+	#ifdef DEBUG
+		printParams();
+	#endif
 	return (0);
 }

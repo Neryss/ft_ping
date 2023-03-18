@@ -10,7 +10,10 @@ int	parseInput(char **argv)
 			if (argv[i][1] == 'h')
 			{
 				printf(HELP_MSG);
+				return (1);
 			}
+			else if (argv[i][1] == 'v')
+				g_params.verbose = true;
 		}
 		i++;
 	}
