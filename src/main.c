@@ -8,7 +8,6 @@ int	main(int argc, char **argv)
 		ERROR_PRINTF("usage error: Destination address required\n");
 		return (0);
 	}
-	for (int i = 1; i < argc; i++)
-		printf("%s\n", argv[i]);
+	parseInput(argv);
 	return (0);
 }

@@ -4,16 +4,16 @@ CFLAGS=  -Wall -Wextra -Werror
 NAME= ft_ping
 
 HEADER= \
+	include/ping.h \
 
 SRC= \
 	src/main.c \
-	src/parsing.c 
-
+	src/parsing.c \
 
 OBJS = $(SRC:%.c=%.o)
 
 
-%.o: %.cpp Makefile $(HEADER)
+%.o: %.c Makefile $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)
