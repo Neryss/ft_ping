@@ -8,7 +8,9 @@
 #include <stdlib.h>
 #include "../libft/libft.h"
 #define ERROR_PRINTF(x) (printf("ping: %s", x))
-#define HELP_MSG "\nUsage\n  ping [options] <destination>\n\nOptions:\n  <destination>       dns name or ip address\n"
+#define HELP_MSG "\nUsage\n  ping [options] <destination>\n\nOptions:\n  <destination>      dns name or ip address\n\
+  -h                 print help and exit\n\
+  -v                 verbose output\n"
 
 typedef struct s_params
 {
