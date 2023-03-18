@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define ERROR_PRINTF(x) (printf("ping: %s", x))
+int	parseInput(char **argv)
 
 #endif

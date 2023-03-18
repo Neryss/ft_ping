@@ -7,9 +7,10 @@ HEADER= \
 
 SRC= \
 	src/main.c \
+	src/parsing.c 
 
 
-OBJS = $(SRC:%.cpp=%.o)
+OBJS = $(SRC:%.c=%.o)
 
 
 %.o: %.cpp Makefile $(HEADER)
