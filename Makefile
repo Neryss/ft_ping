@@ -1,5 +1,6 @@
 CC= clang
 CFLAGS=  -Wall -Wextra -Werror
+MAKEFLAGS += --no-print-directory -j
 
 NAME= ft_ping
 
@@ -25,21 +26,21 @@ debug: CFLAGS+= -DDEBUG -g
 debug: $(NAME)
 
 ./libft/libft.a:
-	make -C ./libft/
+	@make -C ./libft/
 
 $(NAME): $(OBJS) ./libft/libft.a
-	cp ./libft/libft.a ./
+	@cp ./libft/libft.a ./
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -L. -lft
 
 clean:
 	@rm -f $(OBJS)
 
 fclean: clean
-	make -C ./libft/ fclean
-	@rm -f $(NAME)
+	@make -C ./libft/ fclean
+	rm -f $(NAME)
 
 re: fclean
-	$(MAKE) all
+	@$(MAKE) all
 
 run: $(NAME)
 	./$(NAME)
