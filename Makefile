@@ -10,6 +10,7 @@ SRC= \
 	src/main.c \
 	src/parsing.c \
 	src/utils.c \
+	src/ping.c \
 
 OBJS = $(SRC:%.c=%.o)
 

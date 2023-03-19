@@ -1,0 +1,9 @@
+{
+	"files.associations": {
+		"ping.h": "c",
+		"types.h": "c",
+		"socket.h": "c",
+		"netdb.h": "c",
+		"libft.h": "c"
+	}
+}

@@ -34,6 +34,12 @@ int	parseInput(char **argv)
 				k++;
 			}
 		}
+		else
+		{
+			printf("aled : %s\n", argv[i]);
+			if (!(g_params.destination = ft_strdup(argv[i])))
+				return (-1);
+		}
 		i++;
 	}
 	return (0);
