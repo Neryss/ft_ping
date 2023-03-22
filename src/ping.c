@@ -1,5 +1,10 @@
 #include "../include/ping.h"
 
+int	reverseDnsLookup()
+{
+	return (0);
+}
+
 int	dnsLookup()
 {
 	struct addrinfo	hints;
@@ -7,6 +12,10 @@ int	dnsLookup()
 	int				error = 0;
 
 	ft_memset(&hints, '\0', sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_flags = AI_CANONNAME;
+	hints.ai_socktype = SOCK_RAW;
+	hints.ai_protocol = IPPROTO_ICMP;
 	error = getaddrinfo(g_params.destination, NULL, &hints, &res);
 	if (error)
 	{

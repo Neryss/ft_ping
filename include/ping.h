@@ -49,7 +49,8 @@ extern t_params	g_params;
 int				parseInput(char **argv);
 void			printParams();
 void			initParams();
-int	dnsLookup();
+int				dnsLookup();
+int				reverseDnsLookup();
 int				cleanup();
 
 #endif
