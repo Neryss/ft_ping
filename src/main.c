@@ -14,7 +14,6 @@ int	main(int argc, char **argv)
 	}
 	parseInput(argv);
 	dnsLookup();
-	// reverseDnsLookup();
 	#ifdef DEBUG
 		printParams();
 	#endif
