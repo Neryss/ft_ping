@@ -16,15 +16,15 @@ int	parseInput(char **argv)
 					return (1);
 				}
 				else if (argv[i][k] == 'v')
-					g_params.v_flag = true;
+					g_ping.flags.v_flag = true;
 				else if (argv[i][k] == 'f')
-					g_params.f_flag = true;
+					g_ping.flags.f_flag = true;
 				else if (argv[i][k] == 'n')
-					g_params.n_flag = true;
+					g_ping.flags.n_flag = true;
 				else if (argv[i][k] == 'a')
-					g_params.a_flag = true;
+					g_ping.flags.a_flag = true;
 				else if (argv[i][k] == 'D')
-					g_params.D_flag = true;
+					g_ping.flags.D_flag = true;
 				else
 				{
 					printf("invalid option -- \'%c\'\n", argv[i][k]);
@@ -37,7 +37,7 @@ int	parseInput(char **argv)
 		else
 		{
 			printf("aled : %s\n", argv[i]);
-			if (!(g_params.destination = ft_strdup(argv[i])))
+			if (!(g_ping.destination = ft_strdup(argv[i])))
 				return (-1);
 		}
 		i++;

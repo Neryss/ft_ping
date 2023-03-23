@@ -27,9 +27,8 @@
 	-D                 print timestamps (TODO)\n\
 	-t <ttl>           define time to live (TODO)\n"
 
-typedef struct	s_params
+typedef struct s_ping_flags
 {
-	char		*destination;
 	bool		v_flag;	// verbose output
 	bool		f_flag;	// flood ping (TODO)
 	bool		m_flag;	// <mark> tag the packets going out (TODO)
@@ -42,9 +41,18 @@ typedef struct	s_params
 	bool		a_flag;	// use audible ping (TODO ez)
 	bool		D_flag;	// print timestamps (TODO)
 	bool		t_flag;	// <ttl> define time to live (TODO)
-}				t_params;
+}				t_ping_flags;
 
-extern t_params	g_params;
+
+typedef struct	s_ping
+{
+	char			*destination;
+	char			*ip;
+	int				socket;
+	t_ping_flags	flags;
+}				t_ping;
+
+extern t_ping	g_ping;
 
 int				parseInput(char **argv);
 void			printParams();
