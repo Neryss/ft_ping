@@ -60,5 +60,6 @@ void			initParams();
 int				dnsLookup();
 int				reverseDnsLookup();
 int				cleanup();
+int				checkRoot();
 
 #endif

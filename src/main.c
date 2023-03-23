@@ -4,13 +4,8 @@ t_ping g_ping;
 
 int	main(int argc, char **argv)
 {
-	(void)argc;
-	(void)argv;
-	if (getuid() != 0)
-	{
-		ERROR_PRINTF("you must be root to run this program, try with sudo\n");
+	if (checkRoot())
 		return (1);
-	}
 	initParams();
 	if (argc < 2)
 	{
@@ -19,8 +14,7 @@ int	main(int argc, char **argv)
 	}
 	parseInput(argv);
 	dnsLookup();
-	g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
-	if (g_ping.socket < 0)
+	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP) < 0))
 	{
 		printf("Error: sock file descriptor not received\n");
 		return (cleanup());
@@ -29,5 +23,6 @@ int	main(int argc, char **argv)
 	#ifdef DEBUG
 		printParams();
 	#endif
+	close(g_ping.socket);
 	return (cleanup());
 }

@@ -42,7 +42,15 @@ int		cleanup()
 		free(g_ping.destination);
 	if (g_ping.ip)
 		free(g_ping.ip);
-	if (g_ping.socket)
-		close(g_ping.socket);
+	return (0);
+}
+
+int	checkRoot()
+{
+	if (getuid() != 0)
+	{
+		ERROR_PRINTF("you must be root to run this program, try with sudo\n");
+		return (1);
+	}
 	return (0);
 }
