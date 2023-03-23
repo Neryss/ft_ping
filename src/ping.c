@@ -34,7 +34,7 @@ int	dnsLookup()
 	for (p = res; p != NULL; p = p->ai_next)
 		if (p->ai_canonname)
 		{
-			strncpy(fqdn, p->ai_canonname, NI_MAXHOST - 1);
+			ft_strncpy(fqdn, p->ai_canonname, NI_MAXHOST - 1);
 			break;
 		}
 	printf("fqdn: %s\n", fqdn);

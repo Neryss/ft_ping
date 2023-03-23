@@ -23,7 +23,7 @@ all: $(NAME)
 rel: $(NAME)
 
 debug: CFLAGS+= -DDEBUG -g
-debug: $(NAME)
+debug: all
 
 ./libft/libft.a:
 	@make -C ./libft/
