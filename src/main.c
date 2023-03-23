@@ -14,8 +14,9 @@ int	main(int argc, char **argv)
 		printf("Error: sock file descriptor not received\n");
 		return (cleanup());
 	}
-	signal(SIGINT, intHandler);
+	// signal(SIGINT, intHandler);
 	printf("sock file descriptor %d received\n", g_ping.socket);
+	sendPing();
 	#ifdef DEBUG
 		printParams();
 	#endif

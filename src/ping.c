@@ -8,7 +8,7 @@ int	reverseDnsLookup()
 
 void	sendPing()
 {
-	if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, g_ping.ttl, sizeof(g_ping.ttl)))
+	if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, (void *)&g_ping.ttl, sizeof(g_ping.ttl)))
 	{
 		ERROR_PRINTF("setting socket options TTL failed\n");
 		return ;
@@ -16,7 +16,7 @@ void	sendPing()
 	#ifdef DEBUG
 		printf("Socket ttl set\n");
 	#endif
-	if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, g_ping.timeout, sizeof(g_ping.timeout)))
+	if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&g_ping.timeout, sizeof(g_ping.timeout)))
 	{
 		ERROR_PRINTF("setting socket options timeout failed\n");
 		return ;
@@ -24,7 +24,6 @@ void	sendPing()
 	#ifdef DEBUG
 		printf("Socket timeout set\n");
 	#endif
-
 }
 
 int	dnsLookup()
