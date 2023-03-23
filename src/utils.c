@@ -4,6 +4,10 @@ void	initParams()
 {
 	g_ping.destination = NULL;
 	g_ping.socket = 0;
+	g_ping.is_running = true;
+	g_ping.ttl = 64;
+	g_ping.interval = 1;
+	g_ping.timeout = 4;
 	g_ping.flags.v_flag = false;
 	g_ping.flags.f_flag = false;
 	g_ping.flags.m_flag = false;
@@ -53,4 +57,9 @@ int	checkRoot()
 		return (1);
 	}
 	return (0);
+}
+
+void	intHandler()
+{
+	g_ping.is_running = false;
 }

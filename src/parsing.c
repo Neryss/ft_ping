@@ -1,7 +1,13 @@
 #include "../include/ping.h"
 
-int	parseInput(char **argv)
+int	parseInput(int argc, char **argv)
 {
+	if (argc < 2)
+	{
+		ERROR_PRINTF("usage error: Destination address required\n");
+		return (1);
+	}
+	initParams();
 	int	i = 1;
 	while (argv[i])
 	{

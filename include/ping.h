@@ -9,8 +9,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-#include "../libft/libft.h"
 #include <arpa/inet.h>
+#include <signal.h>
+#include "../libft/libft.h"
 #define ERROR_PRINTF(x) (printf("ping: %s", x))
 #define HELP_MSG "\nUsage\n  ping [options] <destination>\n\nOptions:\n  <destination>      dns name or ip address\n\
 	-h                 print help and exit\n\
@@ -46,20 +47,27 @@ typedef struct s_ping_flags
 
 typedef struct	s_ping
 {
-	char			*destination;
-	char			*ip;
-	int				socket;
-	t_ping_flags	flags;
-}				t_ping;
+	char				*destination;
+	char				*ip;
+	int					socket;
+	int					ttl;
+	int					interval;
+	int					timeout;
+	bool				is_running;
+	t_ping_flags		flags;
+}						t_ping;
 
 extern t_ping	g_ping;
 
-int				parseInput(char **argv);
-void			printParams();
-void			initParams();
-int				dnsLookup();
-int				reverseDnsLookup();
-int				cleanup();
-int				checkRoot();
+void	sendPing();
+
+int		parseInput(int argc, char **argv);
+void	printParams();
+void	initParams();
+int		dnsLookup();
+int		reverseDnsLookup();
+int		cleanup();
+int		checkRoot();
+void	intHandler();
 
 #endif

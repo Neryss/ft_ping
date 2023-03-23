@@ -6,19 +6,15 @@ int	main(int argc, char **argv)
 {
 	if (checkRoot())
 		return (1);
-	initParams();
-	if (argc < 2)
-	{
-		ERROR_PRINTF("usage error: Destination address required\n");
-		return (1);
-	}
-	parseInput(argv);
+	if (parseInput(argc, argv))
+		return(0);
 	dnsLookup();
 	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP) < 0))
 	{
 		printf("Error: sock file descriptor not received\n");
 		return (cleanup());
 	}
+	signal(SIGINT, intHandler);
 	printf("sock file descriptor %d received\n", g_ping.socket);
 	#ifdef DEBUG
 		printParams();
