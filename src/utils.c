@@ -40,13 +40,22 @@ void	printParams()
 	printf("ttl:         %d\n", g_ping.flags.t_flag);
 }
 
-int		cleanup()
+#include <fcntl.h>
+
+void	ftExit(int code)
 {
 	if (g_ping.destination)
 		free(g_ping.destination);
 	if (g_ping.ip)
 		free(g_ping.ip);
-	return (0);
+	if (fcntl(g_ping.socket, F_GETFD))
+		close (g_ping.socket);
+	if (g_ping.res)
+	{
+		printf("YIKES\n");
+		freeaddrinfo(g_ping.res);
+	}
+	exit(code);
 }
 
 int	checkRoot()
@@ -54,7 +63,7 @@ int	checkRoot()
 	if (getuid() != 0)
 	{
 		ERROR_PRINTF("you must be root to run this program, try with sudo\n");
-		return (1);
+		ftExit(1);
 	}
 	return (0);
 }

@@ -5,7 +5,7 @@ int	parseInput(int argc, char **argv)
 	if (argc < 2)
 	{
 		ERROR_PRINTF("usage error: Destination address required\n");
-		return (1);
+		ftExit(1);
 	}
 	initParams();
 	int	i = 1;
@@ -19,7 +19,7 @@ int	parseInput(int argc, char **argv)
 				if (argv[i][k] == 'h')
 				{
 					printf(HELP_MSG);
-					return (1);
+					ftExit(1);
 				}
 				else if (argv[i][k] == 'v')
 					g_ping.flags.v_flag = true;
@@ -35,7 +35,7 @@ int	parseInput(int argc, char **argv)
 				{
 					printf("invalid option -- \'%c\'\n", argv[i][k]);
 					printf(HELP_MSG);
-					return (1);
+					ftExit(1);
 				}
 				k++;
 			}
@@ -44,7 +44,7 @@ int	parseInput(int argc, char **argv)
 		{
 			printf("aled : %s\n", argv[i]);
 			if (!(g_ping.destination = ft_strdup(argv[i])))
-				return (-1);
+				ftExit(-1);
 		}
 		i++;
 	}

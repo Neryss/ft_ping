@@ -1,4 +1,4 @@
-CC= clang
+CC= gcc
 CFLAGS=  -Wall -Wextra -Werror
 MAKEFLAGS += --no-print-directory -j
 
@@ -43,6 +43,9 @@ re: fclean
 	@$(MAKE) all
 
 run: $(NAME)
-	./$(NAME)
+	sudo ./$(NAME) google.com
+
+valgrind: $(NAME)
+	sudo valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./$(NAME) google.com
 
 .PHONY: clean fclean re run debug

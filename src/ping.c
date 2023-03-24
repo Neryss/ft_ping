@@ -6,24 +6,39 @@ int	reverseDnsLookup()
 	return (0);
 }
 
-void	sendPing()
+int	socketInit()
 {
-	if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, (void *)&g_ping.ttl, sizeof(g_ping.ttl)))
+	struct timeval	timeout = {(long)g_ping.interval, 0};
+	if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0)
 	{
-		ERROR_PRINTF("setting socket options TTL failed\n");
-		return ;
-	}
-	#ifdef DEBUG
-		printf("Socket ttl set\n");
-	#endif
-	if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&g_ping.timeout, sizeof(g_ping.timeout)))
-	{
-		ERROR_PRINTF("setting socket options timeout failed\n");
-		return ;
+		ERROR_PRINTF("setting socket option timeout failed\n");
+		ftExit(1);
 	}
 	#ifdef DEBUG
 		printf("Socket timeout set\n");
 	#endif
+	if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, &g_ping.ttl, sizeof(int)) < 0)
+	{
+		ERROR_PRINTF("setting socket options TTL failed\n");
+		ftExit(1);
+	}
+	#ifdef DEBUG
+		printf("Socket ttl set\n");
+	#endif
+	return(0);
+}
+
+void	sendPing()
+{
+	
+	// if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&g_ping.timeout, sizeof(g_ping.timeout)))
+	// {
+	// 	ERROR_PRINTF("setting socket options timeout failed\n");
+	// 	return ;
+	// }
+	// #ifdef DEBUG
+	// 	printf("Socket timeout set\n");
+	// #endif
 }
 
 int	dnsLookup()
@@ -41,13 +56,12 @@ int	dnsLookup()
 	if (error)
 	{
 		printf("Error in addrinfo\n");
-		return (1);
+		ftExit(1);
 	}
 	char ip[50] = "";
-	inet_ntop(AF_INET, &res->ai_addr->sa_data[2], ip, sizeof(ip));
+	inet_ntop(res->ai_addr->sa_family, &res->ai_addr->sa_data[2], ip, sizeof(ip));
 	printf("ip: %s\n", ip);
 	g_ping.ip = ft_strdup(ip);
-
-	freeaddrinfo(res);
+	g_ping.res = res;
 	return (0);
 }

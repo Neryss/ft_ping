@@ -4,22 +4,21 @@ t_ping g_ping;
 
 int	main(int argc, char **argv)
 {
-	if (checkRoot())
-		return (1);
-	if (parseInput(argc, argv))
-		return(0);
+	checkRoot();
+	parseInput(argc, argv);
 	dnsLookup();
-	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP) < 0))
+	if ((g_ping.socket = socket(g_ping.res->ai_family, SOCK_RAW, g_ping.res->ai_family == AF_INET ? IPPROTO_ICMP : IPPROTO_ICMPV6)) < 0)
 	{
 		printf("Error: sock file descriptor not received\n");
-		return (cleanup());
+		ftExit(1);
 	}
-	// signal(SIGINT, intHandler);
 	printf("sock file descriptor %d received\n", g_ping.socket);
-	sendPing();
+	socketInit();
+	// signal(SIGINT, intHandler);
+	// sendPing();
 	#ifdef DEBUG
 		printParams();
 	#endif
 	close(g_ping.socket);
-	return (cleanup());
+	ftExit(0);
 }

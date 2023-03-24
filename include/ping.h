@@ -55,6 +55,7 @@ typedef struct	s_ping
 	int					timeout;
 	bool				is_running;
 	t_ping_flags		flags;
+	struct addrinfo		*res;
 }						t_ping;
 
 extern t_ping	g_ping;
@@ -66,8 +67,9 @@ void	printParams();
 void	initParams();
 int		dnsLookup();
 int		reverseDnsLookup();
-int		cleanup();
 int		checkRoot();
 void	intHandler();
+int		socketInit();
+void	ftExit(int code);
 
 #endif
