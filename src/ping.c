@@ -6,6 +6,11 @@ int	reverseDnsLookup()
 	return (0);
 }
 
+void	sendPing()
+{
+	
+}
+
 int	socketInit()
 {
 	struct timeval	timeout = {(long)g_ping.interval, 0};

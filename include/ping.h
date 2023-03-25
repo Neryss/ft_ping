@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <netinet/ip_icmp.h>
 #include <signal.h>
 #include "../libft/libft.h"
 #define ERROR_PRINTF(x) (printf("ping: %s", x))
@@ -53,10 +54,17 @@ typedef struct	s_ping
 	int					ttl;
 	int					interval;
 	int					timeout;
+	int					packet_size;
 	bool				is_running;
 	t_ping_flags		flags;
 	struct addrinfo		*res;
 }						t_ping;
+
+typedef struct	s_pckt
+{
+	struct icmphdr	icmp;
+	char			
+};
 
 extern t_ping	g_ping;
 
@@ -70,6 +78,7 @@ int		reverseDnsLookup();
 int		checkRoot();
 void	intHandler();
 int		socketInit();
+void	sendPing();
 void	ftExit(int code);
 
 #endif

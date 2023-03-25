@@ -8,6 +8,7 @@ void	initParams()
 	g_ping.ttl = 64;
 	g_ping.interval = 1;
 	g_ping.timeout = 4;
+	g_ping.packet_size = 64;
 	g_ping.flags.v_flag = false;
 	g_ping.flags.f_flag = false;
 	g_ping.flags.m_flag = false;

@@ -4,6 +4,8 @@
 		"types.h": "c",
 		"socket.h": "c",
 		"netdb.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"ip_icmp.h": "c",
+		"inet.h": "c"
 	}
 }
