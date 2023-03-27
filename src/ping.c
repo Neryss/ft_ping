@@ -6,9 +6,44 @@ int	reverseDnsLookup()
 	return (0);
 }
 
+//wtf
+
+unsigned short	checksum(void *b, int len)
+{
+	unsigned short	*buf = b;
+	unsigned int	sum = 0;
+	unsigned short	res = 0;
+
+	for (sum = 0; len > 1; len -=2)
+		sum += *buf++;
+	if (len == 1)
+		sum += *(unsigned char*)buf;
+	sum = (sum >> 16) + (sum & 0xFFFF);
+	sum += (sum >> 16);
+	res = ~sum;
+	return (res);
+}
+
 void	sendPing()
 {
-	
+	int	msg_count = 0;
+	while (g_ping.is_running)
+	{
+		t_pckt	pckt;
+		ft_bzero(&pckt, sizeof(pckt));
+		pckt.msg = ft_calloc(g_ping.packet_size-sizeof(struct icmphdr), sizeof(char));
+		pckt.icmp.type = ICMP_ECHO;
+		pckt.icmp.un.echo.id = getpid();
+
+		for (unsigned int i = 0; i < sizeof(pckt.msg) - 1; i++)
+			pckt.msg[i] = i+'0';
+		pckt.icmp.un.echo.sequence = msg_count++;
+		pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
+
+		printf("here\n");
+		usleep(g_ping.interval);
+		free(pckt.msg);
+	}
 }
 
 int	socketInit()
@@ -31,19 +66,6 @@ int	socketInit()
 		printf("Socket ttl set\n");
 	#endif
 	return(0);
-}
-
-void	sendPing()
-{
-	
-	// if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, (const char *)&g_ping.timeout, sizeof(g_ping.timeout)))
-	// {
-	// 	ERROR_PRINTF("setting socket options timeout failed\n");
-	// 	return ;
-	// }
-	// #ifdef DEBUG
-	// 	printf("Socket timeout set\n");
-	// #endif
 }
 
 int	dnsLookup()

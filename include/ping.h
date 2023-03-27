@@ -63,12 +63,10 @@ typedef struct	s_ping
 typedef struct	s_pckt
 {
 	struct icmphdr	icmp;
-	char			
-};
+	char			*msg;
+}				t_pckt;
 
 extern t_ping	g_ping;
-
-void	sendPing();
 
 int		parseInput(int argc, char **argv);
 void	printParams();
