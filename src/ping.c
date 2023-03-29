@@ -27,6 +27,7 @@ unsigned short	checksum(void *b, int len)
 void	ping()
 {
 	int	msg_count = 0;
+	struct timeval	start;
 	while (g_ping.is_running)
 	{
 		t_pckt	pckt;
