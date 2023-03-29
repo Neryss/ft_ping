@@ -24,7 +24,7 @@ unsigned short	checksum(void *b, int len)
 	return (res);
 }
 
-void	sendPing()
+void	ping()
 {
 	int	msg_count = 0;
 	while (g_ping.is_running)

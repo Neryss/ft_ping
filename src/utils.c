@@ -6,7 +6,7 @@ void	initParams()
 	g_ping.socket = 0;
 	g_ping.is_running = true;
 	g_ping.ttl = 64;
-	g_ping.interval = 1;
+	g_ping.interval = 1000000;
 	g_ping.timeout = 4;
 	g_ping.packet_size = 64;
 	g_ping.flags.v_flag = false;
@@ -52,10 +52,8 @@ void	ftExit(int code)
 	if (fcntl(g_ping.socket, F_GETFD))
 		close (g_ping.socket);
 	if (g_ping.res)
-	{
-		printf("YIKES\n");
 		freeaddrinfo(g_ping.res);
-	}
+	printf("exit\n");
 	exit(code);
 }
 

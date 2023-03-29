@@ -76,7 +76,7 @@ int		reverseDnsLookup();
 int		checkRoot();
 void	intHandler();
 int		socketInit();
-void	sendPing();
+void	ping();
 void	ftExit(int code);
 
 #endif

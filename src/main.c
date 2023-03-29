@@ -14,9 +14,9 @@ int	main(int argc, char **argv)
 	}
 	printf("sock file descriptor %d received\n", g_ping.socket);
 	socketInit();
-	// sendPing();
-	// signal(SIGINT, intHandler);
-	// sendPing();
+	// ping();
+	signal(SIGINT, intHandler);
+	ping();
 	#ifdef DEBUG
 		printParams();
 	#endif
