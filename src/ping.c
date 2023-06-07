@@ -24,25 +24,32 @@ unsigned short	checksum(void *b, int len)
 	return (res);
 }
 
+void	sendPacket(int seq)
+{
+	t_pckt	pckt;
+	ft_bzero(&pckt, sizeof(pckt));
+	pckt.msg = ft_calloc(g_ping.packet_size-sizeof(struct icmphdr), sizeof(char));
+	pckt.icmp.type = ICMP_ECHO;
+	pckt.icmp.code = 0;
+	pckt.icmp.un.echo.id = getpid();
+	unsigned int i;
+	for (i = 0; i < sizeof(pckt.msg) - 1; i++)
+		pckt.msg[i] = i+'0';
+	pckt.msg[i] = 0;
+	pckt.icmp.un.echo.sequence = seq++;
+	pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
+}
+
 void	ping()
 {
 	int	msg_count = 0;
 	struct timeval	start;
-	while (g_ping.is_running)
+	int	sent = 0;
+	while (sent < g_ping.timeout)
 	{
-		t_pckt	pckt;
-		ft_bzero(&pckt, sizeof(pckt));
-		pckt.msg = ft_calloc(g_ping.packet_size-sizeof(struct icmphdr), sizeof(char));
-		pckt.icmp.type = ICMP_ECHO;
-		pckt.icmp.un.echo.id = getpid();
-
-		for (unsigned int i = 0; i < sizeof(pckt.msg) - 1; i++)
-			pckt.msg[i] = i+'0';
-		pckt.icmp.un.echo.sequence = msg_count++;
-		pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
-
 		printf("here\n");
 		usleep(g_ping.interval);
+		gettimeofday
 		free(pckt.msg);
 	}
 }

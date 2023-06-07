@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/ip_icmp.h>
@@ -45,6 +46,11 @@ typedef struct s_ping_flags
 	bool		t_flag;	// <ttl> define time to live (TODO)
 }				t_ping_flags;
 
+typedef struct	s_pckt
+{
+	struct icmphdr	icmp;
+	char			*msg;
+}				t_pckt;
 
 typedef struct	s_ping
 {
@@ -60,11 +66,6 @@ typedef struct	s_ping
 	struct addrinfo		*res;
 }						t_ping;
 
-typedef struct	s_pckt
-{
-	struct icmphdr	icmp;
-	char			*msg;
-}				t_pckt;
 
 extern t_ping	g_ping;
 
