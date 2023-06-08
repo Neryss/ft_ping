@@ -48,7 +48,8 @@ typedef struct s_ping_flags
 
 typedef struct	s_pckt
 {
-	struct icmphdr	icmp;
+	struct	icmphdr	*icmp;
+	struct	ip		*ip;
 	char			*msg;
 }				t_pckt;
 
@@ -67,6 +68,7 @@ typedef struct	s_ping
 	struct timeval		start;
 	struct timeval		end;
 	t_pckt				ret;
+	t_pckt				pckt;
 }						t_ping;
 
 

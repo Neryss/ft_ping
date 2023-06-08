@@ -26,23 +26,31 @@ unsigned short	checksum(void *b, int len)
 
 void	sendPacket(int seq)
 {
-	t_pckt	pckt;
-	ft_bzero(&pckt, sizeof(pckt));
-	pckt.msg = ft_calloc(g_ping.packet_size-sizeof(struct icmphdr), sizeof(char));
-	pckt.icmp.type = ICMP_ECHO;
-	pckt.icmp.code = 0;
-	pckt.icmp.un.echo.id = getpid();
-	unsigned int i;
-	for (i = 0; i < sizeof(pckt.msg) - 1; i++)
-		pckt.msg[i] = i+'0';
-	pckt.icmp.un.echo.sequence = seq++;
-	pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
-	gettimeofday(&g_ping.start, NULL);
-	int ret = sendto(g_ping.socket, &pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
+	ft_bzero(g_ping.pckt.msg, g_ping.packet_size);
+	g_ping.pckt.icmp->type = ICMP_ECHO;
+	g_ping.pckt.icmp->code = 0;
+	g_ping.pckt.icmp->un.echo.id = getpid();
+	g_ping.pckt.icmp->un.echo.sequence = seq;
+	g_ping.pckt.icmp->checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
+	int ret = sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
 	printf("sendto error: %d\n", ret);
-	if (ret <= 0)
-		printf("failed to send packet\n");
-	free(pckt.msg);
+	
+	// t_pckt	pckt;
+	// ft_bzero(&pckt, sizeof(pckt));
+	// pckt.msg = ft_calloc(g_ping.packet_size-sizeof(struct icmphdr), sizeof(char));
+	// pckt.icmp.type = ICMP_ECHO;
+	// pckt.icmp.code = 0;
+	// pckt.icmp.un.echo.id = getpid();
+	// unsigned int i;
+	// for (i = 0; i < sizeof(pckt.msg) - 1; i++)
+	// 	pckt.msg[i] = i+'0';
+	// pckt.icmp.un.echo.sequence = seq++;
+	// pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
+	// gettimeofday(&g_ping.start, NULL);
+	// int ret = sendto(g_ping.socket, &pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
+	// if (ret <= 0)
+	// 	printf("failed to send packet\n");
+	// free(pckt.msg);
 }
 
 int		receivePacket(void)
