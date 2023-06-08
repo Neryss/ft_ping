@@ -38,15 +38,18 @@ void	sendPacket(int seq)
 	pckt.icmp.un.echo.sequence = seq++;
 	pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
 	gettimeofday(&g_ping.start, NULL);
-	sendto(g_ping.socket, &pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
+	int ret = sendto(g_ping.socket, &pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
+	printf("sendto error: %d\n", ret);
+	if (ret <= 0)
+		printf("failed to send packet\n");
 	free(pckt.msg);
 }
 
 int		receivePacket(void)
 {
-	int	ret;
+	// int	ret;
 
-	ret = &g_ping.res;
+	// ret = &g_ping.res;
 	// ft_bzero(g_ping.re)
 	return (0);
 }
