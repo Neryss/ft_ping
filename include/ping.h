@@ -66,6 +66,7 @@ typedef struct	s_ping
 	struct addrinfo		*res;
 	struct timeval		start;
 	struct timeval		end;
+	t_pckt				ret;
 }						t_ping;
 
 

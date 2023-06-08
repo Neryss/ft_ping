@@ -35,7 +35,6 @@ void	sendPacket(int seq)
 	unsigned int i;
 	for (i = 0; i < sizeof(pckt.msg) - 1; i++)
 		pckt.msg[i] = i+'0';
-	pckt.msg[i] = 0;
 	pckt.icmp.un.echo.sequence = seq++;
 	pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
 	gettimeofday(&g_ping.start, NULL);
@@ -43,14 +42,23 @@ void	sendPacket(int seq)
 	free(pckt.msg);
 }
 
+int		receivePacket(void)
+{
+	int	ret;
+
+	ret = &g_ping.res;
+	// ft_bzero(g_ping.re)
+	return (0);
+}
+
 void	ping()
 {
 	int	sent = 0;
 	while (sent < g_ping.timeout && g_ping.is_running)
 	{
-		printf("here\n");
 		usleep(g_ping.interval);
 		sendPacket(sent);
+		printf("here\n");
 	}
 }
 
