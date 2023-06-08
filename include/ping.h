@@ -64,6 +64,8 @@ typedef struct	s_ping
 	bool				is_running;
 	t_ping_flags		flags;
 	struct addrinfo		*res;
+	struct timeval		start;
+	struct timeval		end;
 }						t_ping;
 
 

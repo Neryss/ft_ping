@@ -38,19 +38,19 @@ void	sendPacket(int seq)
 	pckt.msg[i] = 0;
 	pckt.icmp.un.echo.sequence = seq++;
 	pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
+	gettimeofday(&g_ping.start, NULL);
+	sendto(g_ping.socket, &pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
+	free(pckt.msg);
 }
 
 void	ping()
 {
-	int	msg_count = 0;
-	struct timeval	start;
 	int	sent = 0;
-	while (sent < g_ping.timeout)
+	while (sent < g_ping.timeout && g_ping.is_running)
 	{
 		printf("here\n");
 		usleep(g_ping.interval);
-		gettimeofday
-		free(pckt.msg);
+		sendPacket(sent);
 	}
 }
 
