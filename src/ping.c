@@ -33,6 +33,7 @@ void	sendPacket(int seq)
 	g_ping.pckt.icmp.un.echo.id = getpid();
 	g_ping.pckt.icmp.un.echo.sequence = seq;
 	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
+	// TODO: fix error on google.com/riot.de etc
 	int ret = sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr));
 	printf("sendto error: %d\n", ret);
 	printf("errno: %s\n", strerror(errno));
