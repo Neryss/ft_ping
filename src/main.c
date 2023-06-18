@@ -7,8 +7,8 @@ int	main(int argc, char **argv)
 	checkRoot();
 	parseInput(argc, argv);
 	dnsLookup();
-	// if ((g_ping.socket = socket(g_ping.res->ai_family, SOCK_RAW, g_ping.res->ai_family == AF_INET ? IPPROTO_ICMP : IPPROTO_ICMPV6)) < 0)
-	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) < 0)
+	// if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) < 0)
+	if ((g_ping.socket = socket(g_ping.res->ai_family, SOCK_RAW, g_ping.res->ai_family == AF_INET ? IPPROTO_ICMP : IPPROTO_ICMPV6)) < 0)
 	{
 		printf("Error: sock file descriptor not received\n");
 		ftExit(1);

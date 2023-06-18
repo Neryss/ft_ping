@@ -27,7 +27,8 @@ unsigned short	checksum(void *b, int len)
 
 void	sendPacket(int seq)
 {
-	// ft_bzero(g_ping.pckt.msg, g_ping.packet_size);
+	// That seems weird (+ the free later on)
+	g_ping.pckt.msg = ft_calloc(g_ping.packet_size, sizeof(char));
 	g_ping.pckt.icmp.type = ICMP_ECHO;
 	g_ping.pckt.icmp.code = 0;
 	g_ping.pckt.icmp.un.echo.id = getpid();
@@ -35,6 +36,7 @@ void	sendPacket(int seq)
 	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
 	// TODO: fix error on google.com/riot.de etc
 	int ret = sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr));
+	free(g_ping.pckt.msg);
 	printf("sendto error: %d\n", ret);
 	printf("errno: %s\n", strerror(errno));
 	
