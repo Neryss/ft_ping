@@ -1,4 +1,5 @@
 #include "../include/ping.h"
+#include <errno.h>
 
 int	reverseDnsLookup()
 {
@@ -26,14 +27,15 @@ unsigned short	checksum(void *b, int len)
 
 void	sendPacket(int seq)
 {
-	ft_bzero(g_ping.pckt.msg, g_ping.packet_size);
-	g_ping.pckt.icmp->type = ICMP_ECHO;
-	g_ping.pckt.icmp->code = 0;
-	g_ping.pckt.icmp->un.echo.id = getpid();
-	g_ping.pckt.icmp->un.echo.sequence = seq;
-	g_ping.pckt.icmp->checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
-	int ret = sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
+	// ft_bzero(g_ping.pckt.msg, g_ping.packet_size);
+	g_ping.pckt.icmp.type = ICMP_ECHO;
+	g_ping.pckt.icmp.code = 0;
+	g_ping.pckt.icmp.un.echo.id = getpid();
+	g_ping.pckt.icmp.un.echo.sequence = seq;
+	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
+	int ret = sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr));
 	printf("sendto error: %d\n", ret);
+	printf("errno: %s\n", strerror(errno));
 	
 	// t_pckt	pckt;
 	// ft_bzero(&pckt, sizeof(pckt));
@@ -114,6 +116,10 @@ int	dnsLookup()
 	}
 	char ip[50] = "";
 	inet_ntop(res->ai_addr->sa_family, &res->ai_addr->sa_data[2], ip, sizeof(ip));
+	if (res->ai_family == AF_INET)
+		printf("AF_INET\n");
+	else
+		printf("IPV6\n");
 	printf("ip: %s\n", ip);
 	g_ping.ip = ft_strdup(ip);
 	g_ping.res = res;

@@ -48,8 +48,8 @@ typedef struct s_ping_flags
 
 typedef struct	s_pckt
 {
-	struct	icmphdr	*icmp;
-	struct	ip		*ip;
+	struct	icmphdr	icmp;
+	struct	ip		ip;
 	char			*msg;
 }				t_pckt;
 
