@@ -32,38 +32,47 @@ void	sendPacket(int seq)
 	g_ping.pckt.icmp.type = ICMP_ECHO;
 	g_ping.pckt.icmp.code = 0;
 	g_ping.pckt.icmp.un.echo.id = getpid();
-	g_ping.pckt.icmp.un.echo.sequence = seq;
+	g_ping.pckt.icmp.un.echo.sequence = seq++;
 	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
+	g_ping.pckt.ip.ip_ttl = g_ping.ttl;
 	// TODO: fix error on google.com/riot.de etc
-	int ret = sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr));
+	gettimeofday(&g_ping.start, NULL);
+	if (sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr)) <= 0)
+	{
+		// DEBUG
+		printf("errno: %s\n", strerror(errno));
+		printf("failed to send packet\n");
+		ftExit(1);
+	}
+	printf("time: %ld\n", g_ping.start.tv_usec);
 	free(g_ping.pckt.msg);
-	printf("sendto error: %d\n", ret);
-	printf("errno: %s\n", strerror(errno));
-	
-	// t_pckt	pckt;
-	// ft_bzero(&pckt, sizeof(pckt));
-	// pckt.msg = ft_calloc(g_ping.packet_size-sizeof(struct icmphdr), sizeof(char));
-	// pckt.icmp.type = ICMP_ECHO;
-	// pckt.icmp.code = 0;
-	// pckt.icmp.un.echo.id = getpid();
-	// unsigned int i;
-	// for (i = 0; i < sizeof(pckt.msg) - 1; i++)
-	// 	pckt.msg[i] = i+'0';
-	// pckt.icmp.un.echo.sequence = seq++;
-	// pckt.icmp.checksum = checksum(&pckt, sizeof(pckt));
-	// gettimeofday(&g_ping.start, NULL);
-	// int ret = sendto(g_ping.socket, &pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.destination, sizeof(struct sockaddr));
-	// if (ret <= 0)
-	// 	printf("failed to send packet\n");
-	// free(pckt.msg);
 }
 
 int		receivePacket(void)
 {
-	// int	ret;
+	char	buff[MAX_PACKET_SIZE];
+	char	control_buffer[MAX_PACKET_SIZE];
+	struct	sockaddr_in addr;
+	struct	iovec iov;
+	struct	msghdr msg;
 
-	// ret = &g_ping.res;
-	// ft_bzero(g_ping.re)
+	iov.iov_base = buff;
+	iov.iov_len = sizeof(buff);
+	msg.msg_name = &addr;
+	msg.msg_namelen = sizeof(addr);
+	msg.msg_iov = &iov;
+	msg.msg_iovlen = 1;
+	msg.msg_control = control_buffer;
+	msg.msg_controllen = sizeof(control_buffer);
+
+	int	rec = recvmsg(g_ping.socket, &msg, 0);
+	if (rec == -1)
+	{
+		printf("error rec\n");
+		printf("errno: %s\n", strerror(errno));
+	}
+	else
+		printf("ping reply received from %s\n", inet_ntoa(addr.sin_addr));
 	return (0);
 }
 
@@ -72,9 +81,10 @@ void	ping()
 	int	sent = 0;
 	while (sent < g_ping.timeout && g_ping.is_running)
 	{
-		usleep(g_ping.interval);
+		// usleep(g_ping.interval);
 		sendPacket(sent);
 		printf("here\n");
+		receivePacket();
 	}
 }
 

@@ -14,6 +14,8 @@
 #include <netinet/ip_icmp.h>
 #include <signal.h>
 #include "../libft/libft.h"
+
+#define MAX_PACKET_SIZE 1024
 #define ERROR_PRINTF(x) (printf("ping: %s", x))
 #define HELP_MSG "\nUsage\n  ping [options] <destination>\n\nOptions:\n  <destination>      dns name or ip address\n\
 	-h                 print help and exit\n\
