@@ -81,7 +81,6 @@ void	ping()
 	int	sent = 0;
 	while (sent < g_ping.timeout && g_ping.is_running)
 	{
-		// usleep(g_ping.interval);
 		sendPacket(sent);
 		// alarm(1);
 		printf("here\n");
