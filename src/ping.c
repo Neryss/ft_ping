@@ -107,7 +107,8 @@ int	dnsLookup()
 	int				error = 0;
 
 	ft_memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;
+	// TODO: fix AF_UNSPEC network unreachable on google.com etc
+	hints.ai_family = AF_INET;
 	hints.ai_flags = AI_CANONNAME;
 	hints.ai_socktype = SOCK_RAW;
 	hints.ai_protocol = IPPROTO_ICMP;
