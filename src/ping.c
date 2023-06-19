@@ -52,7 +52,7 @@ void	sendPacket()
 int		receivePacket(void)
 {
 	char	buff[MAX_PACKET_SIZE];
-	char	control_buffer[MAX_PACKET_SIZE];
+	// char	control_buffer[MAX_PACKET_SIZE];
 	struct	sockaddr_in addr;
 	struct	iovec iov;
 	struct	msghdr msg;
@@ -63,8 +63,8 @@ int		receivePacket(void)
 	msg.msg_namelen = sizeof(addr);
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
-	msg.msg_control = control_buffer;
-	msg.msg_controllen = sizeof(control_buffer);
+	// msg.msg_control = control_buffer;
+	// msg.msg_controllen = sizeof(control_buffer);
 
 	int	rec = recvmsg(g_ping.socket, &msg, 0);
 	if (rec == -1)
@@ -73,7 +73,10 @@ int		receivePacket(void)
 		printf("errno: %s\n", strerror(errno));
 	}
 	else
+	{
+		printf("done\n");
 		printf("ping reply received from %s\n", inet_ntoa(addr.sin_addr));
+	}
 	return (0);
 }
 
@@ -81,10 +84,10 @@ void	ping()
 {
 	while (g_ping.is_running)
 	{
-			sendPacket();
-			alarm(1);
-			printf("here\n");
-			receivePacket();
+		sendPacket();
+		alarm(1);
+		printf("here\n");
+		receivePacket();
 	}
 }
 
