@@ -68,10 +68,10 @@ int	checkRoot()
 	return (0);
 }
 
-void	intHandler(int sig)
+void	intHandler()
 {
-	if (sig == SIGINT)
-		g_ping.is_running = false;
-	// if (sig == SIGALRM)
-	// 	g_ping.sent = 1;
+	g_ping.is_running = false;
 }
+
+void	catcher()
+{}

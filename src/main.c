@@ -9,7 +9,7 @@ int	main(int argc, char **argv)
 	dnsLookup();
 	socketInit();
 	signal(SIGINT, intHandler);
-	signal(SIGALRM, intHandler);
+	signal(SIGALRM, catcher);
 	ping();
 	#ifdef DEBUG
 		printParams();

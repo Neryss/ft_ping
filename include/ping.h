@@ -84,8 +84,11 @@ int		dnsLookup();
 int		reverseDnsLookup();
 int		checkRoot();
 void	intHandler();
+void	catcher();
 int		socketInit();
 void	ping();
 void	ftExit(int code);
+void	receivePacket(void);
+void	sendPacket();
 
 #endif
