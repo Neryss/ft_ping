@@ -25,14 +25,15 @@ unsigned short	checksum(void *b, int len)
 	return (res);
 }
 
-void	sendPacket(int seq)
+void	sendPacket()
 {
 	// That seems weird (+ the free later on)
 	g_ping.pckt.msg = ft_calloc(g_ping.packet_size, sizeof(char));
+	g_ping.pckt.ip.ip_v = 4;
 	g_ping.pckt.icmp.type = ICMP_ECHO;
 	g_ping.pckt.icmp.code = 0;
 	g_ping.pckt.icmp.un.echo.id = getpid();
-	g_ping.pckt.icmp.un.echo.sequence = seq++;
+	g_ping.pckt.icmp.un.echo.sequence = g_ping.seq++;
 	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
 	g_ping.pckt.ip.ip_ttl = g_ping.ttl;
 	// TODO: fix error on google.com/riot.de etc
@@ -78,44 +79,42 @@ int		receivePacket(void)
 
 void	ping()
 {
-	int	sent = 0;
-	while (sent < g_ping.timeout && g_ping.is_running)
+	while (g_ping.is_running)
 	{
-		sendPacket(sent);
-		// alarm(1);
-		printf("here\n");
-		receivePacket();
+			sendPacket();
+			alarm(1);
+			printf("here\n");
+			receivePacket();
 	}
 }
 
 int	socketInit()
 {
 	struct timeval	timeout = {(long)g_ping.interval, 0};
-	int	opt_val = 1;
+	// int	opt_val = 1;
 	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) < 0)
 	{
 		printf("Error: sock file descriptor not received\n");
 		ftExit(1);
 	}
 	printf("sock file descriptor %d received\n", g_ping.socket);
-	if (setsockopt(g_ping.socket, IPPROTO_IP, IP_HDRINCL, &opt_val, sizeof(int)) < 0)
-	{
-		ERROR_PRINTF("setting socket option timeout failed\n");
-		ftExit(1);
-	}
+	// Set timeout option (how many seconds until answer)
+	// if (setsockopt(g_ping.socket, IPPROTO_IP, IP_HDRINCL, &opt_val, sizeof(int)) < 0)
+	// {
+	// 	ERROR_PRINTF("setting socket option timeout failed\n");
+	// 	ftExit(1);
+	// }
+	// If this isn't present it causes a hang
 	if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0)
 	{
 		ERROR_PRINTF("setting socket option timeout failed\n");
 		ftExit(1);
 	}
-	// #ifdef DEBUG
-	// 	printf("Socket timeout set\n");
-	// #endif
-	// if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, &g_ping.ttl, sizeof(int)) < 0)
-	// {
-	// 	ERROR_PRINTF("setting socket options TTL failed\n");
-	// 	ftExit(1);
-	// }
+	if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, &g_ping.ttl, sizeof(int)) < 0)
+	{
+		ERROR_PRINTF("setting socket options TTL failed\n");
+		ftExit(1);
+	}
 	#ifdef DEBUG
 		printf("Socket ttl set\n");
 	#endif

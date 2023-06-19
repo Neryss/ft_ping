@@ -71,6 +71,7 @@ typedef struct	s_ping
 	struct timeval		end;
 	t_pckt				ret;
 	t_pckt				pckt;
+	int					seq;
 }						t_ping;
 
 

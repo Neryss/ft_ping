@@ -6,7 +6,7 @@ void	initParams()
 	g_ping.socket = 0;
 	g_ping.is_running = true;
 	g_ping.ttl = 64;
-	g_ping.interval = 2;
+	g_ping.interval = 1;
 	g_ping.timeout = 4;
 	g_ping.packet_size = 64;
 	g_ping.flags.v_flag = false;
@@ -21,6 +21,7 @@ void	initParams()
 	g_ping.flags.a_flag = false;
 	g_ping.flags.D_flag = false;
 	g_ping.flags.t_flag = false;
+	g_ping.seq = 0;
 }
 
 void	printParams()
@@ -71,4 +72,6 @@ void	intHandler(int sig)
 {
 	if (sig == SIGINT)
 		g_ping.is_running = false;
+	// if (sig == SIGALRM)
+	// 	g_ping.sent = 1;
 }
