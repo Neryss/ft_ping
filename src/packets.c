@@ -3,20 +3,19 @@
 
 //wtf
 
-unsigned short	checksum(void *b, int len)
-{
-	unsigned short	*buf = b;
-	unsigned int	sum = 0;
-	unsigned short	res = 0;
+unsigned short checksum(void *b, int len) {
+	unsigned short *buf = b;
+	unsigned int sum=0;
+	unsigned short result;
 
-	for (sum = 0; len > 1; len -=2)
+	for ( sum = 0; len > 1; len -= 2 )
 		sum += *buf++;
-	if (len == 1)
+	if ( len == 1 )
 		sum += *(unsigned char*)buf;
 	sum = (sum >> 16) + (sum & 0xFFFF);
 	sum += (sum >> 16);
-	res = ~sum;
-	return (res);
+	result = ~sum;
+	return result;
 }
 
 
@@ -55,25 +54,27 @@ void		receivePacket(void)
 void	sendPacket()
 {
 	// That seems weird (+ the free later on)
-	g_ping.pckt.msg = ft_calloc(g_ping.packet_size, sizeof(char));
+	// g_ping.pckt.msg = ft_calloc(g_ping.packet_size, sizeof(char));
 	g_ping.pckt.ip.ip_v = 4;
 	g_ping.pckt.ip.ip_p = IPPROTO_ICMP;
+	g_ping.pckt.ip.ip_ttl = g_ping.ttl;
 	g_ping.pckt.icmp.type = ICMP_ECHO;
 	g_ping.pckt.icmp.code = 0;
 	g_ping.pckt.icmp.un.echo.id = getpid();
 	g_ping.pckt.icmp.un.echo.sequence = g_ping.seq++;
-	g_ping.pckt.icmp.checksum = 0;
-	g_ping.pckt.ip.ip_ttl = g_ping.ttl;
-	// TODO: fix error on google.com/riot.de etc
+	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt.icmp, sizeof(struct icmphdr));
+	// g_ping.pckt.icmp.checksum = 0;
+
 	gettimeofday(&g_ping.start, NULL);
-	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt, sizeof(g_ping.pckt));
-	if (sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr)) <= 0)
-	{
-		// DEBUG
+
+	// Calculate ICMP checksum
+
+	if (sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr)) <= 0) {
 		printf("errno: %s\n", strerror(errno));
 		printf("failed to send packet\n");
 		ftExit(1);
 	}
+
 	printf("time: %ld\n", g_ping.start.tv_usec);
 	free(g_ping.pckt.msg);
 }
