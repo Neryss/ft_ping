@@ -68,7 +68,7 @@ int		receivePacket(void)
 	int	rec = recvmsg(g_ping.socket, &msg, 0);
 	if (rec == -1)
 	{
-		printf("error rec\n");
+		printf("error rec: %d\n", rec);
 		printf("errno: %s\n", strerror(errno));
 	}
 	else
@@ -83,6 +83,7 @@ void	ping()
 	{
 		// usleep(g_ping.interval);
 		sendPacket(sent);
+		// alarm(1);
 		printf("here\n");
 		receivePacket();
 	}
@@ -91,19 +92,31 @@ void	ping()
 int	socketInit()
 {
 	struct timeval	timeout = {(long)g_ping.interval, 0};
+	int	opt_val = 1;
+	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) < 0)
+	{
+		printf("Error: sock file descriptor not received\n");
+		ftExit(1);
+	}
+	printf("sock file descriptor %d received\n", g_ping.socket);
+	if (setsockopt(g_ping.socket, IPPROTO_IP, IP_HDRINCL, &opt_val, sizeof(int)) < 0)
+	{
+		ERROR_PRINTF("setting socket option timeout failed\n");
+		ftExit(1);
+	}
 	if (setsockopt(g_ping.socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout)) < 0)
 	{
 		ERROR_PRINTF("setting socket option timeout failed\n");
 		ftExit(1);
 	}
-	#ifdef DEBUG
-		printf("Socket timeout set\n");
-	#endif
-	if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, &g_ping.ttl, sizeof(int)) < 0)
-	{
-		ERROR_PRINTF("setting socket options TTL failed\n");
-		ftExit(1);
-	}
+	// #ifdef DEBUG
+	// 	printf("Socket timeout set\n");
+	// #endif
+	// if (setsockopt(g_ping.socket, SOL_IP, IP_TTL, &g_ping.ttl, sizeof(int)) < 0)
+	// {
+	// 	ERROR_PRINTF("setting socket options TTL failed\n");
+	// 	ftExit(1);
+	// }
 	#ifdef DEBUG
 		printf("Socket ttl set\n");
 	#endif

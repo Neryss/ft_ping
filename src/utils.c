@@ -67,7 +67,8 @@ int	checkRoot()
 	return (0);
 }
 
-void	intHandler()
+void	intHandler(int sig)
 {
-	g_ping.is_running = false;
+	if (sig == SIGINT)
+		g_ping.is_running = false;
 }
