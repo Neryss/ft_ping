@@ -65,9 +65,10 @@ void	sendPacket()
 	packet_size = ICMP_HEADER_SIZE;
 
 	// Send the packet
-	if (sendto(g_ping.socket, packet, packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr)) == -1) {
+	if (sendto(g_ping.socket, packet, packet_size, 0, (struct sockaddr *)g_ping.res->ai_addr, sizeof(struct sockaddr)) == -1) {
 		perror("sendto");
 		exit(1);
 	}
 	printf("Ping sent\n");
+	g_ping.ready = false;
 }

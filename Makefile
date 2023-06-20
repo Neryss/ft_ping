@@ -1,5 +1,5 @@
 CC= gcc
-CFLAGS=  -Wall -Wextra -Werror
+CFLAGS= -Wall -Wextra -Werror
 MAKEFLAGS += --no-print-directory -j
 
 NAME= ft_ping

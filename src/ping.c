@@ -10,10 +10,12 @@ void	ping()
 {
 	while (g_ping.is_running)
 	{
-		sendPacket();
-		alarm(1);
-		printf("here\n");
-		receivePacket();
+		if (g_ping.ready)
+		{
+			sendPacket();
+			alarm(2);
+			receivePacket();
+		}
 	}
 }
 
@@ -59,6 +61,6 @@ int	dnsLookup()
 	hints.ai_protocol = IPPROTO_ICMP;
 	if (getaddrinfo(g_ping.destination, NULL, &hints, &result) != 0)
 		return (1);
-	g_ping.res = (struct addrinfo *)result->ai_addr;
+	g_ping.res = (struct addrinfo *)result;
 	return (0);
 }

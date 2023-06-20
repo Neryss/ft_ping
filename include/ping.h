@@ -72,6 +72,7 @@ typedef struct	s_ping
 	t_pckt				ret;
 	t_pckt				pckt;
 	int					seq;
+	bool				ready;
 }						t_ping;
 
 

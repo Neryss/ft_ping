@@ -22,6 +22,7 @@ void	initParams()
 	g_ping.flags.D_flag = false;
 	g_ping.flags.t_flag = false;
 	g_ping.seq = 0;
+	g_ping.ready = true;
 }
 
 void	printParams()
@@ -52,6 +53,7 @@ void	ftExit(int code)
 		free(g_ping.ip);
 	if (fcntl(g_ping.socket, F_GETFD))
 		close (g_ping.socket);
+	//leaks or crash
 	if (g_ping.res)
 		freeaddrinfo(g_ping.res);
 	printf("exit\n");
@@ -75,6 +77,6 @@ void	intHandler()
 
 void	catcher(int signum)
 {
+	g_ping.ready = true;
 	(void)signum;
-	printf("catched\n");
 }
