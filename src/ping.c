@@ -49,30 +49,15 @@ int	socketInit()
 
 int	dnsLookup()
 {
-	struct addrinfo	hints;
-	struct addrinfo	*res = NULL;
-	int				error = 0;
+	struct addrinfo hints;
+	struct addrinfo *result;
 
-	ft_memset(&hints, 0, sizeof(hints));
-	// TODO: fix AF_UNSPEC network unreachable on google.com etc
+	ft_bzero(&hints, sizeof(hints));
 	hints.ai_family = AF_INET;
-	hints.ai_flags = AI_CANONNAME;
 	hints.ai_socktype = SOCK_RAW;
 	hints.ai_protocol = IPPROTO_ICMP;
-	error = getaddrinfo(g_ping.destination, NULL, &hints, &res);
-	if (error)
-	{
-		printf("Error in addrinfo\n");
-		ftExit(1);
-	}
-	char ip[50] = "";
-	inet_ntop(res->ai_addr->sa_family, &res->ai_addr->sa_data[2], ip, sizeof(ip));
-	if (res->ai_family == AF_INET)
-		printf("AF_INET\n");
-	else
-		printf("IPV6\n");
-	printf("ip: %s\n", ip);
-	g_ping.ip = ft_strdup(ip);
-	g_ping.res = res;
+	if (getaddrinfo(g_ping.destination, NULL, &hints, &result) != 0)
+		return (1);
+	g_ping.res = (struct addrinfo *)result->ai_addr;
 	return (0);
 }

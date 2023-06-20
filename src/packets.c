@@ -18,63 +18,56 @@ unsigned short checksum(void *b, int len) {
 	return result;
 }
 
-
-// Error doesn't come from recvmsg, tried with recvfrom but still got the issue
 void		receivePacket(void)
 {
-	char	buff[MAX_PACKET_SIZE];
-	// char	control_buffer[MAX_PACKET_SIZE];
-	// struct	sockaddr_in addr;
-	struct	iovec iov;
-	struct	msghdr msg;
+	char buffer[MAX_PACKET_SIZE];
+	struct sockaddr_in addr;
+	struct iovec iov;
+	struct msghdr msg;
+	char control_buffer[MAX_PACKET_SIZE];
+	int received_bytes;
 
-	iov.iov_base = buff;
-	iov.iov_len = sizeof(buff);
-	msg.msg_name = NULL;
-	msg.msg_namelen = 0;
+	iov.iov_base = buffer;
+	iov.iov_len = sizeof(buffer);
+
+	msg.msg_name = &addr;
+	msg.msg_namelen = sizeof(addr);
 	msg.msg_iov = &iov;
 	msg.msg_iovlen = 1;
-	// msg.msg_flags = MSG_DONTWAIT;
-	// msg.msg_control = control_buffer;
-	// msg.msg_controllen = sizeof(control_buffer);
+	msg.msg_control = control_buffer;
+	msg.msg_controllen = sizeof(control_buffer);
 
-	int	rec = recvmsg(g_ping.socket, &msg, 0);
-	if (rec == -1)
-	{
-		printf("error rec: %d\n", rec);
-		printf("errno: %s\n", strerror(errno));
+	if ((received_bytes = recvmsg(g_ping.socket, &msg, 0)) == -1) {
+		perror("recvmsg");
+		exit(1);
 	}
-	else
-	{
-		printf("done\n");
-		// printf("ping reply received from %s\n", inet_ntoa(addr.sin_addr));
-	}
+
+	// Process the received packet
+	printf("Ping reply received from %s\n", inet_ntoa(addr.sin_addr));
 }
-
+#define ICMP_HEADER_SIZE sizeof(struct icmphdr)
 void	sendPacket()
 {
-	// That seems weird (+ the free later on)
-	// g_ping.pckt.msg = ft_calloc(g_ping.packet_size, sizeof(char));
-	g_ping.pckt.ip.ip_v = 4;
-	g_ping.pckt.ip.ip_p = IPPROTO_ICMP;
-	g_ping.pckt.ip.ip_ttl = g_ping.ttl;
-	g_ping.pckt.icmp.type = ICMP_ECHO;
-	g_ping.pckt.icmp.code = 0;
-	g_ping.pckt.icmp.un.echo.id = getpid();
-	g_ping.pckt.icmp.un.echo.sequence = g_ping.seq++;
-	g_ping.pckt.icmp.checksum = checksum(&g_ping.pckt.icmp, sizeof(struct icmphdr));
-	// g_ping.pckt.icmp.checksum = 0;
+	struct icmphdr icmp_header;
+	char packet[MAX_PACKET_SIZE];
+	int packet_size;
 
-	gettimeofday(&g_ping.start, NULL);
+	// Prepare ICMP header
+	icmp_header.type = ICMP_ECHO;
+	icmp_header.code = 0;
+	icmp_header.un.echo.id = getpid();
+	icmp_header.un.echo.sequence = 0;
+	icmp_header.checksum = 0;
+	icmp_header.checksum = checksum((unsigned short *)&icmp_header, ICMP_HEADER_SIZE);
 
-	// Calculate ICMP checksum
+	// Construct the packet
+	memcpy(packet, &icmp_header, ICMP_HEADER_SIZE);
+	packet_size = ICMP_HEADER_SIZE;
 
-	if (sendto(g_ping.socket, &g_ping.pckt, g_ping.packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr)) <= 0) {
-		printf("errno: %s\n", strerror(errno));
-		printf("failed to send packet\n");
-		ftExit(1);
+	// Send the packet
+	if (sendto(g_ping.socket, packet, packet_size, 0, (struct sockaddr *)g_ping.res, sizeof(struct sockaddr)) == -1) {
+		perror("sendto");
+		exit(1);
 	}
-
-	printf("time: %ld\n", g_ping.start.tv_usec);
-	free(g_ping.pckt.msg);
+	printf("Ping sent\n");
 }
