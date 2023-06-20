@@ -1,11 +1,5 @@
 #include "../include/ping.h"
 
-int	reverseDnsLookup()
-{
-	//todo
-	return (0);
-}
-
 void	ping()
 {
 	while (g_ping.is_running)

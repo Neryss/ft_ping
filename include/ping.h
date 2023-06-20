@@ -69,8 +69,6 @@ typedef struct	s_ping
 	struct addrinfo		*res;
 	struct timeval		start;
 	struct timeval		end;
-	t_pckt				ret;
-	t_pckt				pckt;
 	int					seq;
 	bool				ready;
 }						t_ping;
@@ -82,7 +80,6 @@ int		parseInput(int argc, char **argv);
 void	printParams();
 void	initParams();
 int		dnsLookup();
-int		reverseDnsLookup();
 int		checkRoot();
 void	intHandler();
 void	catcher();
