@@ -11,7 +11,7 @@ void	ping()
 	while (g_ping.is_running)
 	{
 		sendPacket();
-		// alarm(1);
+		alarm(1);
 		printf("here\n");
 		receivePacket();
 	}
