@@ -5,7 +5,7 @@ void	initParams()
 	g_ping.destination = NULL;
 	g_ping.socket = 0;
 	g_ping.is_running = true;
-	g_ping.ttl = 64;
+	g_ping.ttl = 32;
 	g_ping.interval = 4;
 	g_ping.timeout = 4;
 	g_ping.packet_size = 64;
@@ -73,5 +73,8 @@ void	intHandler()
 	g_ping.is_running = false;
 }
 
-void	catcher()
-{}
+void	catcher(int signum)
+{
+	(void)signum;
+	printf("catched\n");
+}

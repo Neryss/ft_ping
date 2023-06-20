@@ -11,7 +11,7 @@ void	ping()
 	while (g_ping.is_running)
 	{
 		sendPacket();
-		alarm(1);
+		// alarm(1);
 		printf("here\n");
 		receivePacket();
 	}
@@ -27,6 +27,7 @@ int	socketInit()
 		ftExit(1);
 	}
 	printf("sock file descriptor %d received\n", g_ping.socket);
+	// doesn't work
 	// Set timeout option (how many seconds until answer)
 	// if (setsockopt(g_ping.socket, IPPROTO_IP, IP_HDRINCL, &opt_val, sizeof(int)) < 0)
 	// {
