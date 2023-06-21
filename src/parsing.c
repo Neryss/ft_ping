@@ -42,7 +42,6 @@ int	parseInput(int argc, char **argv)
 		}
 		else
 		{
-			printf("aled : %s\n", argv[i]);
 			if (!(g_ping.destination = ft_strdup(argv[i])))
 				ftExit(-1);
 		}

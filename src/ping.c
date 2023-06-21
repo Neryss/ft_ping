@@ -2,6 +2,7 @@
 
 void	ping()
 {
+	printf("PING ");
 	while (g_ping.is_running)
 	{
 		if (g_ping.ready)
