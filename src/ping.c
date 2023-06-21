@@ -8,7 +8,7 @@ void	ping()
 		if (g_ping.ready)
 		{
 			sendPacket();
-			alarm(2);
+			alarm(1);
 			receivePacket();
 		}
 	}

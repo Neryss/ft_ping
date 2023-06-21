@@ -50,24 +50,27 @@ void		receivePacket(void)
 	inet_ntop(AF_INET, &addr.sin_addr, tmp, 100);
 	printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2fms\n", received_bytes, g_ping.destination, tmp, g_ping.seq, g_ping.ttl, (double)(g_ping.end.tv_usec - g_ping.start.tv_usec)/1000);
 }
-#define ICMP_HEADER_SIZE sizeof(struct icmphdr)
+
+struct pckt
+{
+	struct	icmphdr icmp_header;
+	char	msg[64 - sizeof(struct icmphdr)];
+};
+
 void	sendPacket()
 {
-	struct icmphdr icmp_header;
-	char packet[MAX_PACKET_SIZE];
-	int packet_size;
+	struct pckt	t_packet;
+	ft_bzero(&t_packet, sizeof(struct pckt));
 
 	// Prepare ICMP header
-	icmp_header.type = ICMP_ECHO;
-	icmp_header.code = 0;
-	icmp_header.un.echo.id = getpid();
-	icmp_header.un.echo.sequence = g_ping.seq++;
-	icmp_header.checksum = 0;
-	icmp_header.checksum = checksum((unsigned short *)&icmp_header, ICMP_HEADER_SIZE);
-
-	// Construct the packet
-	memcpy(packet, &icmp_header, ICMP_HEADER_SIZE);
-	packet_size = ICMP_HEADER_SIZE;
+	t_packet.icmp_header.type = ICMP_ECHO;
+	t_packet.icmp_header.code = 0;
+	t_packet.icmp_header.un.echo.id = getpid();
+	t_packet.icmp_header.un.echo.sequence = g_ping.seq++;
+	for (size_t i = 0; i < sizeof(t_packet.msg); i++)
+		t_packet.msg[i] = i+'0';
+	t_packet.icmp_header.checksum = 0;
+	t_packet.icmp_header.checksum = checksum(&t_packet, sizeof(t_packet));
 
 	// Send the packet
 	if (gettimeofday(&g_ping.start, NULL) < 0)
@@ -76,7 +79,7 @@ void	sendPacket()
 		ftExit(1);
 	}
 	// printf("sent at: %ld\n", g_ping.start.tv_usec);
-	if (sendto(g_ping.socket, packet, packet_size, 0, (struct sockaddr *)g_ping.res->ai_addr, sizeof(struct sockaddr)) == -1) {
+	if (sendto(g_ping.socket, &t_packet, sizeof(t_packet), 0, (struct sockaddr *)g_ping.res->ai_addr, sizeof(struct sockaddr)) == -1) {
 		perror("sendto");
 		ftExit(1);
 	}
