@@ -11,9 +11,6 @@ int	main(int argc, char **argv)
 	signal(SIGINT, intHandler);
 	signal(SIGALRM, catcher);
 	ping();
-	#ifdef DEBUG
-		printParams();
-	#endif
 	close(g_ping.socket);
 	ftExit(0);
 }

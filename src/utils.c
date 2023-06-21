@@ -53,7 +53,6 @@ void	ftExit(int code)
 		free(g_ping.ip);
 	if (fcntl(g_ping.socket, F_GETFD))
 		close (g_ping.socket);
-	//leaks or crash
 	if (g_ping.res)
 		freeaddrinfo(g_ping.res);
 	printf("exit\n");

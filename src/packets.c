@@ -37,13 +37,18 @@ void		receivePacket(void)
 	msg.msg_control = control_buffer;
 	msg.msg_controllen = sizeof(control_buffer);
 
-	if ((received_bytes = recvmsg(g_ping.socket, &msg, 0)) == -1) {
-		perror("recvmsg");
-		exit(1);
+	if ((received_bytes = recvmsg(g_ping.socket, &msg, 0)) < 0) {
+		ERROR_PRINTF("recvmsg\n");
+		ftExit(1);
 	}
-
-	// Process the received packet
-	printf("Ping reply received from %s\n", inet_ntoa(addr.sin_addr));
+	if (gettimeofday(&g_ping.end, NULL) < 0)
+	{
+		ERROR_PRINTF("gettimeofday error\n");
+		ftExit(1);
+	}
+	char	tmp[50];
+	inet_ntop(AF_INET, &addr.sin_addr, tmp, 100);
+	printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2fms\n", received_bytes, g_ping.destination, tmp, g_ping.seq, g_ping.ttl, (double)(g_ping.end.tv_usec - g_ping.start.tv_usec)/1000);
 }
 #define ICMP_HEADER_SIZE sizeof(struct icmphdr)
 void	sendPacket()
@@ -56,7 +61,7 @@ void	sendPacket()
 	icmp_header.type = ICMP_ECHO;
 	icmp_header.code = 0;
 	icmp_header.un.echo.id = getpid();
-	icmp_header.un.echo.sequence = 0;
+	icmp_header.un.echo.sequence = g_ping.seq++;
 	icmp_header.checksum = 0;
 	icmp_header.checksum = checksum((unsigned short *)&icmp_header, ICMP_HEADER_SIZE);
 
@@ -65,10 +70,16 @@ void	sendPacket()
 	packet_size = ICMP_HEADER_SIZE;
 
 	// Send the packet
+	if (gettimeofday(&g_ping.start, NULL) < 0)
+	{
+		ERROR_PRINTF("gettimeofday error\n");
+		ftExit(1);
+	}
+	// printf("sent at: %ld\n", g_ping.start.tv_usec);
 	if (sendto(g_ping.socket, packet, packet_size, 0, (struct sockaddr *)g_ping.res->ai_addr, sizeof(struct sockaddr)) == -1) {
 		perror("sendto");
-		exit(1);
+		ftExit(1);
 	}
-	printf("Ping sent\n");
+	// printf("Ping sent\n");
 	g_ping.ready = false;
 }
