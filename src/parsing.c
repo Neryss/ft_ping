@@ -101,7 +101,7 @@ int	parseInput(int argc, char **argv)
 				ftExit(-1);
 			}
 			inet_ntop(AF_INET, &(((struct sockaddr_in *)g_ping.res->ai_addr)->sin_addr), g_ping.ip, INET_ADDRSTRLEN);
-			printf("PING: %s (%s) %d(%d) bytes of data.\n", g_ping.destination, g_ping.ip, g_ping.packet_size - 28, g_ping.packet_size);
+			printf("PING: %s (%s) %d(%ld) bytes of data.\n", g_ping.destination, g_ping.ip, g_ping.packet_size + 8, g_ping.packet_size + 8 + sizeof(struct iphdr));
 		}
 		else if (ft_isalnum(argv[i][k]))
 		{

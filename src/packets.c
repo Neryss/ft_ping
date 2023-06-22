@@ -86,6 +86,7 @@ void	sendPacket()
 	struct pckt	t_packet;
 	ft_bzero(&t_packet, sizeof(struct pckt));
 
+	//TODO: generate timestamp
 	// Prepare ICMP header
 	t_packet.icmp_header.type = ICMP_ECHO;
 	t_packet.icmp_header.code = 0;
