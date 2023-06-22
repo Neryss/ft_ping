@@ -6,7 +6,7 @@ void	ping()
 	gettimeofday(&g_ping.command_time, NULL);
 	while (g_ping.is_running)
 	{
-		if (g_ping.seq >= g_ping.count)
+		if (g_ping.seq >= g_ping.count && g_ping.count >= 0)
 		{
 			displayStats();
 			ftExit(0);

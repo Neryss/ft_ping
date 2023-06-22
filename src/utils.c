@@ -9,7 +9,7 @@ void	initParams()
 	g_ping.interval = 4;
 	g_ping.timeout = 4;
 	g_ping.packet_size = 64;
-	g_ping.count = 0;
+	g_ping.count = -1;
 	g_ping.flags.v_flag = false;
 	g_ping.flags.f_flag = false;
 	g_ping.flags.m_flag = false;
@@ -103,8 +103,9 @@ void	displayStats()
 	time += (end.tv_sec - g_ping.command_time.tv_sec);
 	time *= 1000.0;
 	loss = (g_ping.sent - g_ping.received) / g_ping.sent * 100.0;
-	printf("DEBUG\n sqrd: %Lf\n sent: %f\n avg: %Lf", g_ping.time.sqrd, g_ping.sent, g_ping.time.avg);
-	mdev = (g_ping.time.sqrd / g_ping.sent) - g_ping.time.avg * g_ping.time.avg;
+	printf("DEBUG\n sqrd: %Lf\n sent: %f\n avg: %Lf\n", g_ping.time.sqrd, g_ping.sent, g_ping.time.avg);
+	mdev = (g_ping.time.sqrd / g_ping.sent) -
+		g_ping.time.avg * g_ping.time.avg;
 	printf("MDEV: %Lf\n", mdev);
 	mdev = sqrt(mdev);
 	printf("MDEV: %Lf\n", mdev);
