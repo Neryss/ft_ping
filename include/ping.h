@@ -13,6 +13,7 @@
 #include <arpa/inet.h>
 #include <netinet/ip_icmp.h>
 #include <signal.h>
+#include <math.h>
 #include "../libft/libft.h"
 
 #define MAX_PACKET_SIZE 1024

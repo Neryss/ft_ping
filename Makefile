@@ -31,7 +31,7 @@ debug: all
 
 $(NAME): $(OBJS) ./libft/libft.a
 	@cp ./libft/libft.a ./
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -L. -lft
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lm -L. -lft
 
 clean:
 	@rm -f $(OBJS)

@@ -108,7 +108,7 @@ void	sendPacket()
 		perror("sendto");
 		ftExit(1);
 	}
+	g_ping.sent > 1 ? gettimeofday(&g_ping.command_time, NULL) : 0;
 	g_ping.sent++;
-	// printf("Ping sent\n");
 	g_ping.ready = false;
 }

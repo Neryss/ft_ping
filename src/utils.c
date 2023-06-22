@@ -90,10 +90,12 @@ void	catcher(int signum)
 	(void)signum;
 }
 
+#include <math.h>
 void	displayStats()
 {
 	struct timeval	end;
 	double long		time;
+	double long		mdev;
 	double			loss;
 
 	gettimeofday(&end, NULL);
@@ -101,7 +103,12 @@ void	displayStats()
 	time += (end.tv_sec - g_ping.command_time.tv_sec);
 	time *= 1000.0;
 	loss = (g_ping.sent - g_ping.received) / g_ping.sent * 100.0;
-
+	printf("DEBUG\n sqrd: %Lf\n sent: %f\n avg: %Lf", g_ping.time.sqrd, g_ping.sent, g_ping.time.avg);
+	mdev = (g_ping.time.sqrd / g_ping.sent) - g_ping.time.avg * g_ping.time.avg;
+	printf("MDEV: %Lf\n", mdev);
+	mdev = sqrt(mdev);
+	printf("MDEV: %Lf\n", mdev);
 	printf("--- %s ping statistics ---\n", g_ping.destination);
 	printf("%.0f packet transmitted, %.0f received, time: %Lf ms\nloss: %.0f\n", g_ping.sent, g_ping.received, time, loss);
+	printf("rtt min/avg/max/mdev = %.3Lf/%.3Lf/%.3Lf/%.3Lf ms\n", g_ping.time.min, g_ping.time.avg, g_ping.time.max, mdev);
 }
