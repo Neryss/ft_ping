@@ -3,10 +3,14 @@
 void	ping()
 {
 	printf("PING ");
+	gettimeofday(&g_ping.command_time, NULL);
 	while (g_ping.is_running)
 	{
 		if (g_ping.seq >= g_ping.count)
+		{
+			displayStats();
 			ftExit(0);
+		}
 		if (g_ping.ready)
 		{
 			sendPacket();

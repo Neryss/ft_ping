@@ -23,6 +23,7 @@ void	initParams()
 	g_ping.flags.D_flag = false;
 	g_ping.flags.t_flag = false;
 	g_ping.seq = 0;
+	g_ping.sent = 0;
 	g_ping.ready = true;
 }
 
@@ -81,4 +82,19 @@ void	catcher(int signum)
 {
 	g_ping.ready = true;
 	(void)signum;
+}
+
+void	displayStats()
+{
+	struct timeval	end;
+	double long		time;
+	double			loss;
+
+	gettimeofday(&end, NULL);
+	time = (end.tv_usec - g_ping.command_time.tv_usec) / 1000000.0;
+	time += (end.tv_sec - g_ping.command_time.tv_sec);
+	time *= 1000.0;
+	loss = (g_ping.sent - g_ping.received) / g_ping.sent * 100.0;
+
+	printf("%.0f packet transmitted, %.0f received, time: %Lf ms\nloss: %.0f\n", g_ping.sent, g_ping.received, time, loss);
 }

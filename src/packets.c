@@ -46,8 +46,9 @@ void		receivePacket(void)
 
 	if ((received_bytes = recvmsg(g_ping.socket, &msg, 0)) < 0) {
 		ERROR_PRINTF("recvmsg\n");
-		ftExit(1);
 	}
+	if (received_bytes)
+		g_ping.received++;
 	if (gettimeofday(&g_ping.end, NULL) < 0)
 	{
 		ERROR_PRINTF("gettimeofday error\n");
@@ -91,6 +92,7 @@ void	sendPacket()
 		perror("sendto");
 		ftExit(1);
 	}
+	g_ping.sent++;
 	// printf("Ping sent\n");
 	g_ping.ready = false;
 }

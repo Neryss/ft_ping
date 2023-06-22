@@ -68,9 +68,13 @@ typedef struct	s_ping
 	bool				is_running;
 	t_ping_flags		flags;
 	struct addrinfo		*res;
+	long double			total;
+	struct timeval		command_time;
 	struct timeval		start;
 	struct timeval		end;
 	int					seq;
+	double				sent;
+	double				received;
 	bool				ready;
 }						t_ping;
 
@@ -90,5 +94,6 @@ void	ftExit(int code);
 void	receivePacket(void);
 void	sendPacket();
 void	setPacketSize(char *size);
+void	displayStats();
 
 #endif
