@@ -2,7 +2,9 @@
 
 void	ping()
 {
-	printf("PING ");
+	// char	tmp[50];
+	// inet_ntop(AF_INET, , tmp, 100);
+	// printf("PING %s (%s)\n", g_ping.destination, tmp);
 	gettimeofday(&g_ping.command_time, NULL);
 	while (g_ping.is_running)
 	{
@@ -29,7 +31,6 @@ int	socketInit()
 		printf("Error: sock file descriptor not received\n");
 		ftExit(1);
 	}
-	printf("sock file descriptor %d received\n", g_ping.socket);
 	// doesn't work
 	// Set timeout option (how many seconds until answer)
 	// if (setsockopt(g_ping.socket, IPPROTO_IP, IP_HDRINCL, &opt_val, sizeof(int)) < 0)

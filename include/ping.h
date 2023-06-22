@@ -68,7 +68,7 @@ typedef struct	s_time
 typedef struct	s_ping
 {
 	char				*destination;
-	char				*ip;
+	char				ip[INET_ADDRSTRLEN];
 	int					socket;
 	int					ttl;
 	int					interval;

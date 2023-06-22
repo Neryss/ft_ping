@@ -8,7 +8,7 @@ void	initParams()
 	g_ping.ttl = 32;
 	g_ping.interval = 4;
 	g_ping.timeout = 4;
-	g_ping.packet_size = 64;
+	g_ping.packet_size = 84;
 	g_ping.count = -1;
 	g_ping.flags.v_flag = false;
 	g_ping.flags.f_flag = false;
@@ -24,6 +24,7 @@ void	initParams()
 	g_ping.flags.t_flag = false;
 	g_ping.seq = 0;
 	g_ping.sent = 0;
+	g_ping.received = 0;
 	g_ping.ready = true;
 	g_ping.time.max = 0;
 	g_ping.time.min = 0;
@@ -58,8 +59,6 @@ void	ftExit(int code)
 {
 	if (g_ping.destination)
 		free(g_ping.destination);
-	if (g_ping.ip)
-		free(g_ping.ip);
 	if (fcntl(g_ping.socket, F_GETFD))
 		close (g_ping.socket);
 	if (g_ping.res)
@@ -102,14 +101,11 @@ void	displayStats()
 	time = (end.tv_usec - g_ping.command_time.tv_usec) / 1000000.0;
 	time += (end.tv_sec - g_ping.command_time.tv_sec);
 	time *= 1000.0;
+	g_ping.time.avg /= g_ping.sent;
 	loss = (g_ping.sent - g_ping.received) / g_ping.sent * 100.0;
-	printf("DEBUG\n sqrd: %Lf\n sent: %f\n avg: %Lf\n", g_ping.time.sqrd, g_ping.sent, g_ping.time.avg);
-	mdev = (g_ping.time.sqrd / g_ping.sent) -
-		g_ping.time.avg * g_ping.time.avg;
-	printf("MDEV: %Lf\n", mdev);
-	mdev = sqrt(mdev);
-	printf("MDEV: %Lf\n", mdev);
+	// called mdev but it's the standart derivation
+	mdev = sqrt((g_ping.time.sqrd / g_ping.sent) - (g_ping.time.avg * g_ping.time.avg));
 	printf("--- %s ping statistics ---\n", g_ping.destination);
-	printf("%.0f packet transmitted, %.0f received, time: %Lf ms\nloss: %.0f\n", g_ping.sent, g_ping.received, time, loss);
+	printf("%.0f packet transmitted, %.0f received, %.0f%% packet loss, time: %.0Lf ms\n", g_ping.sent, g_ping.received, loss, time);
 	printf("rtt min/avg/max/mdev = %.3Lf/%.3Lf/%.3Lf/%.3Lf ms\n", g_ping.time.min, g_ping.time.avg, g_ping.time.max, mdev);
 }
