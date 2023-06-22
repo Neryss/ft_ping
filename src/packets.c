@@ -54,7 +54,7 @@ void		receivePacket(void)
 struct pckt
 {
 	struct	icmphdr icmp_header;
-	char	msg[64 - sizeof(struct icmphdr)];
+	char	msg[MAX_PACKET_SIZE];
 };
 
 void	sendPacket()
@@ -67,10 +67,11 @@ void	sendPacket()
 	t_packet.icmp_header.code = 0;
 	t_packet.icmp_header.un.echo.id = getpid();
 	t_packet.icmp_header.un.echo.sequence = g_ping.seq++;
-	for (size_t i = 0; i < sizeof(t_packet.msg); i++)
+	for (size_t i = 0; i < (size_t)g_ping.packet_size; i++)
 		t_packet.msg[i] = i+'0';
+	// printf("payload: %s\n", t_packet.msg);
 	t_packet.icmp_header.checksum = 0;
-	t_packet.icmp_header.checksum = checksum(&t_packet, sizeof(t_packet));
+	t_packet.icmp_header.checksum = checksum(&t_packet, g_ping.packet_size + sizeof(struct icmphdr));
 
 	// Send the packet
 	if (gettimeofday(&g_ping.start, NULL) < 0)
@@ -79,7 +80,7 @@ void	sendPacket()
 		ftExit(1);
 	}
 	// printf("sent at: %ld\n", g_ping.start.tv_usec);
-	if (sendto(g_ping.socket, &t_packet, sizeof(t_packet), 0, (struct sockaddr *)g_ping.res->ai_addr, sizeof(struct sockaddr)) == -1) {
+	if (sendto(g_ping.socket, &t_packet, g_ping.packet_size + sizeof(struct icmphdr), 0, (struct sockaddr *)g_ping.res->ai_addr, sizeof(struct sockaddr)) == -1) {
 		perror("sendto");
 		ftExit(1);
 	}
