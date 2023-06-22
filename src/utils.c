@@ -25,6 +25,10 @@ void	initParams()
 	g_ping.seq = 0;
 	g_ping.sent = 0;
 	g_ping.ready = true;
+	g_ping.time.max = 0;
+	g_ping.time.min = 0;
+	g_ping.time.avg = 0;
+	g_ping.time.rtt = 0;
 }
 
 void	printParams()

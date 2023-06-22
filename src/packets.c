@@ -25,6 +25,16 @@ unsigned short checksum(void *b, int len) {
 	return result;
 }
 
+void		rttStats()
+{
+	long double	rtt;
+	rtt = (g_ping.end.tv_usec - g_ping.start.tv_usec) / 1000000.0;
+	rtt += g_ping.end.tv_sec - g_ping.start.tv_sec;
+	rtt *= 1000.0;
+	g_ping.time.rtt = rtt;
+	g_ping.time.avg += rtt;
+}
+
 void		receivePacket(void)
 {
 	char buffer[MAX_PACKET_SIZE];
@@ -56,7 +66,8 @@ void		receivePacket(void)
 	}
 	char	tmp[50];
 	inet_ntop(AF_INET, &addr.sin_addr, tmp, 100);
-	printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2fms\n", received_bytes, g_ping.destination, tmp, g_ping.seq, g_ping.ttl, (double)(g_ping.end.tv_usec - g_ping.start.tv_usec)/1000);
+	rttStats();
+	printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2Lfms\n", received_bytes, g_ping.destination, tmp, g_ping.seq, g_ping.ttl, g_ping.time.rtt);
 }
 
 struct pckt

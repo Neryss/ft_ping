@@ -55,6 +55,14 @@ typedef struct	s_pckt
 	char			*msg;
 }				t_pckt;
 
+typedef struct	s_time
+{
+	long double	min;
+	long double	max;
+	long double	avg;
+	long double	rtt;
+}				t_time;
+
 typedef struct	s_ping
 {
 	char				*destination;
@@ -72,6 +80,7 @@ typedef struct	s_ping
 	struct timeval		command_time;
 	struct timeval		start;
 	struct timeval		end;
+	t_time				time;
 	int					seq;
 	double				sent;
 	double				received;
