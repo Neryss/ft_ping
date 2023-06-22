@@ -7,6 +7,7 @@ int	main(int argc, char **argv)
 	checkRoot();
 	parseInput(argc, argv);
 	socketInit();
+	printParams();
 	signal(SIGINT, intHandler);
 	signal(SIGALRM, catcher);
 	ping();

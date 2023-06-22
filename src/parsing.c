@@ -2,6 +2,9 @@
 
 int	parseInput(int argc, char **argv)
 {
+	bool args = false;
+	bool ttl = false;
+	bool count = false;
 	if (argc < 2)
 	{
 		ERROR_PRINTF("usage error: Destination address required\n");
@@ -12,10 +15,10 @@ int	parseInput(int argc, char **argv)
 	while (argv[i])
 	{
 		int	k = 0;
-		printf("scan: [%c]\n", argv[i][k]);
+		// printf("scan: [%c]\n", argv[i][k]);
 		if (argv[i][k++] == '-')
 		{
-			printf("help: [%c]\n", argv[i][k]);
+			// printf("help: [%c]\n", argv[i][k]);
 			while (argv[i][k])
 			{
 				if (argv[i][k] == 'h')
@@ -33,13 +36,33 @@ int	parseInput(int argc, char **argv)
 					g_ping.flags.a_flag = true;
 				else if (argv[i][k] == 'D')
 					g_ping.flags.D_flag = true;
+				// check if size is formated correctly (can be -s<size> or -s <size>)
 				else if (argv[i][k] == 's')
 				{
+					if (!argv[i][k + 1])
+						args = true;
+					else
+						g_ping.packet_size = ft_atoi(argv[i] + 2);
 					while (argv[i][k])
-					{
-						printf("char[%c]\n", argv[i][k]);
 						k++;
-					}
+				}
+				else if (argv[i][k] == 't')
+				{
+					if (!argv[i][k + 1])
+						ttl = true;
+					else
+						g_ping.ttl = ft_atoi(argv[i] + 2);
+					while (argv[i][k])
+						k++;
+				}
+				else if (argv[i][k] == 'c')
+				{
+					if (!argv[i][k + 1])
+						count = true;
+					else
+						g_ping.count = ft_atoi(argv[i] + 2);
+					while (argv[i][k])
+						k++;
 				}
 				else
 				{
@@ -51,6 +74,23 @@ int	parseInput(int argc, char **argv)
 					k++;
 			}
 		}
+		else if (args || ttl || count)
+		{
+			if (!ft_isalnum(argv[i][k]))
+			{
+				printf("invalid argument: %s\n", argv[i]);
+				ftExit(-1);
+			}
+			if (args)
+				g_ping.packet_size = ft_atoi(argv[i]);
+			else if (ttl)
+				g_ping.ttl = ft_atoi(argv[i]);
+			else if (count)
+				g_ping.count = ft_atoi(argv[i]);
+			args = false;
+			ttl = false;
+			count = false;
+		}
 		else if (!g_ping.destination)
 		{
 			if (!(g_ping.destination = ft_strdup(argv[i])))
@@ -60,6 +100,11 @@ int	parseInput(int argc, char **argv)
 				printf("%s: No address associated with hostname\n", g_ping.destination);
 				ftExit(-1);
 			}
+		}
+		else if (ft_isalnum(argv[i][k]))
+		{
+			printf("bad argument\n");
+			ftExit(-1);
 		}
 		i++;
 	}

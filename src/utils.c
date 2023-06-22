@@ -8,7 +8,8 @@ void	initParams()
 	g_ping.ttl = 32;
 	g_ping.interval = 4;
 	g_ping.timeout = 4;
-	g_ping.packet_size = 12;
+	g_ping.packet_size = 64;
+	g_ping.count = 0;
 	g_ping.flags.v_flag = false;
 	g_ping.flags.f_flag = false;
 	g_ping.flags.m_flag = false;
@@ -40,7 +41,9 @@ void	printParams()
 	printf("timeout:     %d\n", g_ping.flags.W_flag);
 	printf("audible:     %d\n", g_ping.flags.a_flag);
 	printf("timestamp:   %d\n", g_ping.flags.D_flag);
-	printf("ttl:         %d\n", g_ping.flags.t_flag);
+	printf("ttl:         %d\n", g_ping.ttl);
+	printf("size:        %d\n", g_ping.packet_size);
+	printf("count:       %d\n", g_ping.count);
 }
 
 #include <fcntl.h>

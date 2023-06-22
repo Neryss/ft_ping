@@ -5,6 +5,8 @@ void	ping()
 	printf("PING ");
 	while (g_ping.is_running)
 	{
+		if (g_ping.seq >= g_ping.count)
+			ftExit(0);
 		if (g_ping.ready)
 		{
 			sendPacket();

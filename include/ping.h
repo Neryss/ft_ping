@@ -64,6 +64,7 @@ typedef struct	s_ping
 	int					interval;
 	int					timeout;
 	int					packet_size;
+	int					count;
 	bool				is_running;
 	t_ping_flags		flags;
 	struct addrinfo		*res;
