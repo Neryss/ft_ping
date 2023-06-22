@@ -88,5 +88,6 @@ void	ping();
 void	ftExit(int code);
 void	receivePacket(void);
 void	sendPacket();
+void	setPacketSize(char *size);
 
 #endif

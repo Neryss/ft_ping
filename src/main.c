@@ -6,7 +6,6 @@ int	main(int argc, char **argv)
 {
 	checkRoot();
 	parseInput(argc, argv);
-	dnsLookup();
 	socketInit();
 	signal(SIGINT, intHandler);
 	signal(SIGALRM, catcher);

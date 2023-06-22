@@ -3,6 +3,13 @@
 
 //wtf
 
+void	setPacketSize(char *size)
+{
+	printf("size: %s\n", size);
+	g_ping.packet_size = ft_atoi(size);
+	printf("packetsize: %d\n", g_ping.packet_size);
+}
+
 unsigned short checksum(void *b, int len) {
 	unsigned short *buf = b;
 	unsigned int sum=0;
