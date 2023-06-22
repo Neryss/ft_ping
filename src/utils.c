@@ -81,6 +81,7 @@ int	checkRoot()
 void	intHandler()
 {
 	g_ping.is_running = false;
+	displayStats();
 }
 
 void	catcher(int signum)
@@ -101,5 +102,6 @@ void	displayStats()
 	time *= 1000.0;
 	loss = (g_ping.sent - g_ping.received) / g_ping.sent * 100.0;
 
+	printf("--- %s ping statistics ---\n", g_ping.destination);
 	printf("%.0f packet transmitted, %.0f received, time: %Lf ms\nloss: %.0f\n", g_ping.sent, g_ping.received, time, loss);
 }
