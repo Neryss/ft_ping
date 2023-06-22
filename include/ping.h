@@ -61,6 +61,7 @@ typedef struct	s_time
 	long double	max;
 	long double	avg;
 	long double	rtt;
+	long double	sqrd;
 }				t_time;
 
 typedef struct	s_ping

@@ -29,6 +29,7 @@ void	initParams()
 	g_ping.time.min = 0;
 	g_ping.time.avg = 0;
 	g_ping.time.rtt = 0;
+	g_ping.time.sqrd = 0;
 }
 
 void	printParams()

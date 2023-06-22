@@ -31,8 +31,13 @@ void		rttStats()
 	rtt = (g_ping.end.tv_usec - g_ping.start.tv_usec) / 1000000.0;
 	rtt += g_ping.end.tv_sec - g_ping.start.tv_sec;
 	rtt *= 1000.0;
+	if (rtt > g_ping.time.max)
+		g_ping.time.max = rtt;
+	if (rtt < g_ping.time.min || g_ping.time.min == 0.0)
+		g_ping.time.min = rtt;
 	g_ping.time.rtt = rtt;
 	g_ping.time.avg += rtt;
+	g_ping.time.sqrd += rtt * rtt;
 }
 
 void		receivePacket(void)
