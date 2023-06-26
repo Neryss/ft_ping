@@ -31,6 +31,7 @@ void	initParams()
 	g_ping.time.avg = 0;
 	g_ping.time.rtt = 0;
 	g_ping.time.sqrd = 0;
+	clock_gettime(CLOCK_MONOTONIC, &g_ping.ts_s);
 }
 
 void	printParams()
@@ -92,21 +93,27 @@ void	catcher(int signum)
 #include <math.h>
 void	displayStats()
 {
-	struct timeval	end;
+	// struct timeval	end;
 	double long		time;
 	double long		mdev;
 	double			loss;
 
-	gettimeofday(&end, NULL);
+	// gettimeofday(&end, NULL);
 	// This needs to be fixed
-	time = (end.tv_usec - g_ping.command_time.tv_usec) / 1000000.0;
-	time += (end.tv_sec - g_ping.command_time.tv_sec);
-	time *= 1000.0;
+	// time = (end.tv_usec - g_ping.command_time.tv_usec) / 1000000.0;
+	// time += (end.tv_sec - g_ping.command_time.tv_sec);
+	// time *= 1000.0;
 	g_ping.time.avg /= g_ping.sent;
+	struct timespec	ts_end;
+	clock_gettime(CLOCK_MONOTONIC, &ts_end);
+	double timeElapsed = ((double)(ts_end.tv_nsec -
+								   g_ping.ts_s.tv_nsec)) /
+						 1000000.0;
+	long double total_msec = (ts_end.tv_sec - g_ping.ts_s.tv_sec) * 1000.0 + timeElapsed;
 	loss = (g_ping.sent - g_ping.received) / g_ping.sent * 100.0;
 	// called mdev but it's the standart derivation
 	mdev = sqrt((g_ping.time.sqrd / g_ping.sent) - (g_ping.time.avg * g_ping.time.avg));
 	printf("--- %s ping statistics ---\n", g_ping.destination);
-	printf("%.0f packet transmitted, %.0f received, %.0f%% packet loss, time: %.0Lf ms\n", g_ping.sent, g_ping.received, loss, time);
+	printf("%.0f packet transmitted, %.0f received, %.0f%% packet loss, time: %.0Lf ms\n", g_ping.sent, g_ping.received, loss, total_msec);
 	printf("rtt min/avg/max/mdev = %.3Lf/%.3Lf/%.3Lf/%.3Lf ms\n", g_ping.time.min, g_ping.time.avg, g_ping.time.max, mdev);
 }

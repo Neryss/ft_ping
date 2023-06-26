@@ -82,6 +82,7 @@ typedef struct	s_ping
 	struct timeval		command_time;
 	struct timeval		start;
 	struct timeval		end;
+	struct timespec		ts_s;
 	t_time				time;
 	int					seq;
 	double				sent;
