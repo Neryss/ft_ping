@@ -98,6 +98,7 @@ void	displayStats()
 	double			loss;
 
 	gettimeofday(&end, NULL);
+	// This needs to be fixed
 	time = (end.tv_usec - g_ping.command_time.tv_usec) / 1000000.0;
 	time += (end.tv_sec - g_ping.command_time.tv_sec);
 	time *= 1000.0;
