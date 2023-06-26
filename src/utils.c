@@ -55,12 +55,23 @@ void	printParams()
 }
 
 #include <fcntl.h>
+static int	checkSocket()
+{
+	int	error = 0;
+	socklen_t	len = sizeof(error);
+
+	if (setsockopt(g_ping.socket, SOL_SOCKET, SO_ERROR, &error, len))
+		return (1);
+	if (error)
+		return (1);
+	return (0);
+}
 
 void	ftExit(int code)
 {
 	if (g_ping.destination)
 		free(g_ping.destination);
-	if (fcntl(g_ping.socket, F_GETFD))
+	if (checkSocket())
 		close (g_ping.socket);
 	if (g_ping.res)
 		freeaddrinfo(g_ping.res);
