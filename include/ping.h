@@ -24,14 +24,14 @@
 	-f                 flood ping (TODO)\n\
 	-m <mark>          tag the packets going out (TODO)\n\
 	-l <preload>       send <preload> number of packages while waiting replies (TODO)\n\
-	-I <interface>     either interface name or address (TODO)\n\
+	-i <interval>      seconds between sending each packet\n\
 	-M <opts>          define mtu discovery, can be one of <do|dont|want> (TODO)\n\
 	-n                 no dns name resolution (TODO)\n\
 	-w <deadline>      reply wait <deadline> in seconds (TODO)\n\
-	-W <timeout>       time to wait for response (TODO)\n\
+	-W <timeout>       time to wait for response\n\
 	-a                 use audible ping (TODO)\n\
 	-D                 print timestamps (TODO)\n\
-	-t <ttl>           define time to live (TODO)\n"
+	-t <ttl>           define time to live\n"
 
 typedef struct s_ping_flags
 {

@@ -70,6 +70,8 @@ void		receivePacket(void)
 		ftExit(1);
 	}
 	char	tmp[50];
+	if (g_ping.flags.D_flag)
+		printf("[%d.%06d] ", (int)g_ping.end.tv_sec, (int)g_ping.end.tv_usec);
 	inet_ntop(AF_INET, &addr.sin_addr, tmp, 100);
 	rttStats();
 	printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2Lfms\n", received_bytes, g_ping.destination, tmp, g_ping.seq, g_ping.ttl, g_ping.time.rtt);

@@ -16,7 +16,7 @@ void	ping()
 		if (g_ping.ready)
 		{
 			sendPacket();
-			alarm(1);
+			alarm(g_ping.interval);
 			receivePacket();
 		}
 	}
@@ -24,7 +24,7 @@ void	ping()
 
 int	socketInit()
 {
-	struct timeval	timeout = {(long)g_ping.interval, 0};
+	struct timeval	timeout = {(long)g_ping.timeout, 0};
 	// int	opt_val = 1;
 	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) < 0)
 	{

@@ -6,7 +6,7 @@ void	initParams()
 	g_ping.socket = 0;
 	g_ping.is_running = true;
 	g_ping.ttl = 32;
-	g_ping.interval = 4;
+	g_ping.interval = 1;
 	g_ping.timeout = 4;
 	g_ping.packet_size = 48;
 	g_ping.count = -1;

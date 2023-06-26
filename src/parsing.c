@@ -5,6 +5,8 @@ int	parseInput(int argc, char **argv)
 	bool args = false;
 	bool ttl = false;
 	bool count = false;
+	bool	timeout = false;
+	bool	interval = false;
 	if (argc < 2)
 	{
 		ERROR_PRINTF("usage error: Destination address required\n");
@@ -64,6 +66,24 @@ int	parseInput(int argc, char **argv)
 					while (argv[i][k])
 						k++;
 				}
+				else if (argv[i][k] == 'W')
+				{
+					if (!argv[i][k + 1])
+						timeout = true;
+					else
+						g_ping.timeout = ft_atoi(argv[i] + 2);
+					while (argv[i][k])
+						k++;
+				}
+				else if (argv[i][k] == 'i')
+				{
+					if (!argv[i][k + 1])
+						interval = true;
+					else
+						g_ping.interval = ft_atoi(argv[i] + 2);
+					while (argv[i][k])
+						k++;
+				}
 				else
 				{
 					printf("invalid option -- \'%c\'\n", argv[i][k]);
@@ -87,6 +107,10 @@ int	parseInput(int argc, char **argv)
 				g_ping.ttl = ft_atoi(argv[i]);
 			else if (count)
 				g_ping.count = ft_atoi(argv[i]);
+			else if (timeout)
+				g_ping.timeout = ft_atoi(argv[i]);
+			else if (interval)
+				g_ping.timeout = ft_atoi(argv[i]);
 			args = false;
 			ttl = false;
 			count = false;
