@@ -1,21 +1,21 @@
 #include "../include/ping.h"
 
-static void	badArgument(char *argv)
+static void badArgument(char *argv)
 {
 	printf("ping: invalid argument: \'%s\'\n", argv);
 	ftExit(1);
 }
 
-typedef	struct s_bool
+typedef struct s_bool
 {
 	bool args;
 	bool ttl;
 	bool count;
 	bool timeout;
 	bool interval;
-}			t_bool;
+} t_bool;
 
-static void	handleSpaceArgs(char *argv, t_bool *flags, int k)
+static void handleSpaceArgs(char *argv, t_bool *flags, int k)
 {
 	if (!ft_isalnum(argv[k]))
 	{
@@ -59,7 +59,7 @@ static void	handleSpaceArgs(char *argv, t_bool *flags, int k)
 	flags->interval = false;
 }
 
-static void	init_flags(t_bool *flags)
+static void init_flags(t_bool *flags)
 {
 	flags->args = false;
 	flags->ttl = false;
@@ -68,9 +68,102 @@ static void	init_flags(t_bool *flags)
 	flags->interval = false;
 }
 
+static void checkArgs(char *argv, t_bool *flags, int *k)
+{
+	if (argv[*k] == 'h')
+	{
+		printf(HELP_MSG);
+		ftExit(1);
+	}
+	// check if size is formated correctly (can be -s<size> or -s <size>)
+	else if (argv[*k] == 'v')
+		g_ping.flags.v_flag = true;
+	else if (argv[*k] == 'f')
+		g_ping.flags.f_flag = true;
+	else if (argv[*k] == 'n')
+		g_ping.flags.n_flag = true;
+	else if (argv[*k] == 'a')
+		g_ping.flags.a_flag = true;
+	else if (argv[*k] == 'D')
+		g_ping.flags.D_flag = true;
+	else if (argv[*k] == 's')
+	{
+		if (!argv[*k + 1])
+			flags->args = true;
+		else
+		{
+			if (!ft_islinenum(argv + 2))
+				badArgument(argv);
+			g_ping.packet_size = ft_atoi(argv + 2);
+		}
+		while (argv[*k])
+			(*k)++;
+	}
+	else if (argv[*k] == 't')
+	{
+		if (!argv[*k + 1])
+			flags->ttl = true;
+		else
+		{
+			if (!ft_islinenum(argv + 2))
+				badArgument(argv);
+			g_ping.ttl = ft_atoi(argv + 2);
+		}
+		while (argv[*k])
+			(*k)++;
+	}
+	else if (argv[*k] == 'c')
+	{
+		if (!argv[*k + 1])
+			flags->count = true;
+		else
+		{
+			if (!ft_islinenum(argv + 2))
+				badArgument(argv);
+			g_ping.count = ft_atoi(argv + 2);
+		}
+		while (argv[*k])
+			(*k)++;
+	}
+	else if (argv[*k] == 'W')
+	{
+		if (!argv[*k + 1])
+			flags->timeout = true;
+		else
+		{
+			if (!ft_islinenum(argv + 2))
+				badArgument(argv);
+			g_ping.timeout = ft_atoi(argv + 2);
+		}
+		while (argv[*k])
+			(*k)++;
+	}
+	else if (argv[*k] == 'i')
+	{
+		if (!argv[*k + 1])
+			flags->interval = true;
+		else
+		{
+			if (!ft_islinenum(argv + 2))
+				badArgument(argv);
+			g_ping.interval = ft_atoi(argv + 2);
+		}
+		while (argv[*k])
+			(*k)++;
+	}
+	else
+	{
+		printf("invalid option -- \'%c\'\n", argv[*k]);
+		printf(HELP_MSG);
+		badArgument(argv);
+	}
+	if (argv[*k])
+		(*k)++;
+}
+
 int parseInput(int argc, char **argv)
 {
-	t_bool	flags;
+	t_bool flags;
 	init_flags(&flags);
 	if (argc < 2)
 	{
@@ -85,102 +178,13 @@ int parseInput(int argc, char **argv)
 		// printf("scan: [%c]\n", argv[i][k]);
 		if (argv[i][k++] == '-')
 		{
-			// printf("help: [%c]\n", argv[i][k]);
+			printf("help: [%c]\n", argv[i][k]);
 			while (argv[i][k])
-			{
-				if (argv[i][k] == 'h')
-				{
-					printf(HELP_MSG);
-					ftExit(1);
-				}
-				else if (argv[i][k] == 'v')
-					g_ping.flags.v_flag = true;
-				else if (argv[i][k] == 'f')
-					g_ping.flags.f_flag = true;
-				else if (argv[i][k] == 'n')
-					g_ping.flags.n_flag = true;
-				else if (argv[i][k] == 'a')
-					g_ping.flags.a_flag = true;
-				else if (argv[i][k] == 'D')
-					g_ping.flags.D_flag = true;
-				// check if size is formated correctly (can be -s<size> or -s <size>)
-				else if (argv[i][k] == 's')
-				{
-					if (!argv[i][k + 1])
-						flags.args = true;
-					else
-					{
-						if (!ft_islinenum(argv[i] + 2))
-							badArgument(argv[i]);
-						g_ping.packet_size = ft_atoi(argv[i] + 2);
-					}
-					while (argv[i][k])
-						k++;
-				}
-				else if (argv[i][k] == 't')
-				{
-					if (!argv[i][k + 1])
-						flags.ttl = true;
-					else
-					{
-						if (!ft_islinenum(argv[i] + 2))
-							badArgument(argv[i]);
-						g_ping.ttl = ft_atoi(argv[i] + 2);
-					}
-					while (argv[i][k])
-						k++;
-				}
-				else if (argv[i][k] == 'c')
-				{
-					if (!argv[i][k + 1])
-						flags.count = true;
-					else
-					{
-						if (!ft_islinenum(argv[i] + 2))
-							badArgument(argv[i]);
-						g_ping.count = ft_atoi(argv[i] + 2);
-					}
-					while (argv[i][k])
-						k++;
-				}
-				else if (argv[i][k] == 'W')
-				{
-					if (!argv[i][k + 1])
-						flags.timeout = true;
-					else
-					{
-						if (!ft_islinenum(argv[i] + 2))
-							badArgument(argv[i]);
-						g_ping.timeout = ft_atoi(argv[i] + 2);
-					}
-					while (argv[i][k])
-						k++;
-				}
-				else if (argv[i][k] == 'i')
-				{
-					if (!argv[i][k + 1])
-						flags.interval = true;
-					else
-					{
-						if (!ft_islinenum(argv[i] + 2))
-							badArgument(argv[i]);
-						g_ping.interval = ft_atoi(argv[i] + 2);
-					}
-					while (argv[i][k])
-						k++;
-				}
-				else
-				{
-					printf("invalid option -- \'%c\'\n", argv[i][k]);
-					printf(HELP_MSG);
-					badArgument(argv[i]);
-				}
-				if (argv[i][k])
-					k++;
-			}
+				checkArgs(argv[i], &flags, &k);
 		}
 		else if (flags.args || flags.ttl || flags.count || flags.timeout || flags.interval)
 		{
+			printf("| %d | %d | %d | %d | %d |\n", flags.args, flags.ttl, flags.timeout, flags.interval, g_ping.flags.D_flag);
 			handleSpaceArgs(argv[i], &flags, k);
 		}
 		else if (!g_ping.destination)
