@@ -29,8 +29,8 @@
 	-n                 no dns name resolution (TODO)\n\
 	-w <deadline>      reply wait <deadline> in seconds (TODO)\n\
 	-W <timeout>       time to wait for response\n\
-	-a                 use audible ping (TODO)\n\
-	-D                 print timestamps (TODO)\n\
+	-a                 use audible ping\n\
+	-D                 print timestamps\n\
 	-t <ttl>           define time to live\n"
 
 typedef struct s_ping_flags

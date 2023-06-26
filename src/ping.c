@@ -15,6 +15,8 @@ void	ping()
 		}
 		if (g_ping.ready)
 		{
+			if (g_ping.flags.a_flag)
+				printf("\a");
 			sendPacket();
 			alarm(g_ping.interval);
 			receivePacket();

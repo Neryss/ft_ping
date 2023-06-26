@@ -17,46 +17,38 @@ typedef struct s_bool
 
 static void handleSpaceArgs(char *argv, t_bool *flags, int k)
 {
-	if (!ft_isalnum(argv[k]))
+	if (!ft_isdigit(argv[k]))
 	{
-		printf("invalid argument: %s\n", argv);
+		printf("invalid argument: %s[%c]\n", argv, argv[k]);
 		ftExit(-1);
 	}
+	if (!ft_islinenum(argv))
+			badArgument(argv);
 	if (flags->args)
 	{
-		if (!ft_islinenum(argv + 2))
-			badArgument(argv);
 		g_ping.packet_size = ft_atoi(argv);
+		flags->args = false;
 	}
-	else if (flags->ttl)
+	if (flags->ttl)
 	{
-		if (!ft_islinenum(argv + 2))
-			badArgument(argv);
 		g_ping.ttl = ft_atoi(argv);
+		flags->ttl = false;
 	}
-	else if (flags->count)
+	if (flags->count)
 	{
-		if (!ft_islinenum(argv + 2))
-			badArgument(argv);
 		g_ping.count = ft_atoi(argv);
+		flags->count = false;
 	}
-	else if (flags->timeout)
+	if (flags->timeout)
 	{
-		if (!ft_islinenum(argv + 2))
-			badArgument(argv);
 		g_ping.timeout = ft_atoi(argv);
+		flags->timeout = false;
 	}
-	else if (flags->interval)
+	if (flags->interval)
 	{
-		if (!ft_islinenum(argv + 2))
-			badArgument(argv);
 		g_ping.interval = ft_atoi(argv);
+		flags->interval = false;
 	}
-	flags->args = false;
-	flags->ttl = false;
-	flags->count = false;
-	flags->timeout = false;
-	flags->interval = false;
 }
 
 static void init_flags(t_bool *flags)
@@ -175,30 +167,25 @@ int parseInput(int argc, char **argv)
 	while (argv[i])
 	{
 		int k = 0;
-		// printf("scan: [%c]\n", argv[i][k]);
-		if (argv[i][k++] == '-')
+		if (argv[i][k] == '-')
 		{
-			printf("help: [%c]\n", argv[i][k]);
+			k++;
 			while (argv[i][k])
 				checkArgs(argv[i], &flags, &k);
 		}
 		else if (flags.args || flags.ttl || flags.count || flags.timeout || flags.interval)
-		{
-			printf("| %d | %d | %d | %d | %d |\n", flags.args, flags.ttl, flags.timeout, flags.interval, g_ping.flags.D_flag);
 			handleSpaceArgs(argv[i], &flags, k);
-		}
 		else if (!g_ping.destination)
 		{
 			if (!(g_ping.destination = ft_strdup(argv[i])))
 				ftExit(-1);
-			printf("Dest: %s\n", g_ping.destination);
 			if (dnsLookup())
 			{
 				printf("%s: No address associated with hostname\n", g_ping.destination);
 				ftExit(-1);
 			}
 			inet_ntop(AF_INET, &(((struct sockaddr_in *)g_ping.res->ai_addr)->sin_addr), g_ping.ip, INET_ADDRSTRLEN);
-			printf("PING: %s (%s) %d(%ld) bytes of data.\n", g_ping.destination, g_ping.ip, g_ping.packet_size + 8, g_ping.packet_size + 8 + sizeof(struct iphdr));
+			printf("PING %s (%s) %d(%ld) bytes of data.\n", g_ping.destination, g_ping.ip, g_ping.packet_size + 8, g_ping.packet_size + 8 + sizeof(struct iphdr));
 		}
 		else if (ft_isalnum(argv[i][k]))
 		{
