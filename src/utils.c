@@ -64,7 +64,6 @@ void	ftExit(int code)
 		close (g_ping.socket);
 	if (g_ping.res)
 		freeaddrinfo(g_ping.res);
-	printf("exit\n");
 	exit(code);
 }
 
@@ -94,7 +93,7 @@ void	catcher(int signum)
 void	displayStats()
 {
 	// struct timeval	end;
-	double long		time;
+	// double long		time;
 	double long		mdev;
 	double			loss;
 

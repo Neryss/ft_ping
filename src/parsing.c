@@ -1,22 +1,28 @@
 #include "../include/ping.h"
 
-int	parseInput(int argc, char **argv)
+static void	badArgument(char *argv)
+{
+	printf("ping: invalid argument: \'%s\'\n", argv);
+	ftExit(1);
+}
+
+int parseInput(int argc, char **argv)
 {
 	bool args = false;
 	bool ttl = false;
 	bool count = false;
-	bool	timeout = false;
-	bool	interval = false;
+	bool timeout = false;
+	bool interval = false;
 	if (argc < 2)
 	{
 		ERROR_PRINTF("usage error: Destination address required\n");
 		ftExit(1);
 	}
 	initParams();
-	int	i = 1;
+	int i = 1;
 	while (argv[i])
 	{
-		int	k = 0;
+		int k = 0;
 		// printf("scan: [%c]\n", argv[i][k]);
 		if (argv[i][k++] == '-')
 		{
@@ -44,7 +50,11 @@ int	parseInput(int argc, char **argv)
 					if (!argv[i][k + 1])
 						args = true;
 					else
+					{
+						if (!ft_islinenum(argv[i] + 2))
+							badArgument(argv[i]);
 						g_ping.packet_size = ft_atoi(argv[i] + 2);
+					}
 					while (argv[i][k])
 						k++;
 				}
@@ -53,7 +63,11 @@ int	parseInput(int argc, char **argv)
 					if (!argv[i][k + 1])
 						ttl = true;
 					else
+					{
+						if (!ft_islinenum(argv[i] + 2))
+							badArgument(argv[i]);
 						g_ping.ttl = ft_atoi(argv[i] + 2);
+					}
 					while (argv[i][k])
 						k++;
 				}
@@ -62,7 +76,11 @@ int	parseInput(int argc, char **argv)
 					if (!argv[i][k + 1])
 						count = true;
 					else
+					{
+						if (!ft_islinenum(argv[i] + 2))
+							badArgument(argv[i]);
 						g_ping.count = ft_atoi(argv[i] + 2);
+					}
 					while (argv[i][k])
 						k++;
 				}
@@ -71,7 +89,11 @@ int	parseInput(int argc, char **argv)
 					if (!argv[i][k + 1])
 						timeout = true;
 					else
+					{
+						if (!ft_islinenum(argv[i] + 2))
+							badArgument(argv[i]);
 						g_ping.timeout = ft_atoi(argv[i] + 2);
+					}
 					while (argv[i][k])
 						k++;
 				}
@@ -80,7 +102,11 @@ int	parseInput(int argc, char **argv)
 					if (!argv[i][k + 1])
 						interval = true;
 					else
+					{
+						if (!ft_islinenum(argv[i] + 2))
+							badArgument(argv[i]);
 						g_ping.interval = ft_atoi(argv[i] + 2);
+					}
 					while (argv[i][k])
 						k++;
 				}
@@ -88,13 +114,13 @@ int	parseInput(int argc, char **argv)
 				{
 					printf("invalid option -- \'%c\'\n", argv[i][k]);
 					printf(HELP_MSG);
-					ftExit(1);
+					badArgument(argv[i]);
 				}
 				if (argv[i][k])
 					k++;
 			}
 		}
-		else if (args || ttl || count)
+		else if (args || ttl || count || timeout || interval)
 		{
 			if (!ft_isalnum(argv[i][k]))
 			{
@@ -102,23 +128,46 @@ int	parseInput(int argc, char **argv)
 				ftExit(-1);
 			}
 			if (args)
+			{
+				if (!ft_islinenum(argv[i] + 2))
+					badArgument(argv[i]);
 				g_ping.packet_size = ft_atoi(argv[i]);
+			}
 			else if (ttl)
+			{
+				if (!ft_islinenum(argv[i] + 2))
+					badArgument(argv[i]);
 				g_ping.ttl = ft_atoi(argv[i]);
+			}
 			else if (count)
+			{
+				if (!ft_islinenum(argv[i] + 2))
+					badArgument(argv[i]);
 				g_ping.count = ft_atoi(argv[i]);
+			}
 			else if (timeout)
+			{
+				if (!ft_islinenum(argv[i] + 2))
+					badArgument(argv[i]);
 				g_ping.timeout = ft_atoi(argv[i]);
+			}
 			else if (interval)
-				g_ping.timeout = ft_atoi(argv[i]);
+			{
+				if (!ft_islinenum(argv[i] + 2))
+					badArgument(argv[i]);
+				g_ping.interval = ft_atoi(argv[i]);
+			}
 			args = false;
 			ttl = false;
 			count = false;
+			timeout = false;
+			interval = false;
 		}
 		else if (!g_ping.destination)
 		{
 			if (!(g_ping.destination = ft_strdup(argv[i])))
 				ftExit(-1);
+			printf("Dest: %s\n", g_ping.destination);
 			if (dnsLookup())
 			{
 				printf("%s: No address associated with hostname\n", g_ping.destination);
@@ -133,6 +182,11 @@ int	parseInput(int argc, char **argv)
 			ftExit(-1);
 		}
 		i++;
+	}
+	if (!g_ping.destination)
+	{
+		printf("ping: usage error: Destination address required\n");
+		ftExit(1);
 	}
 	return (0);
 }
