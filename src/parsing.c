@@ -6,13 +6,72 @@ static void	badArgument(char *argv)
 	ftExit(1);
 }
 
+typedef	struct s_bool
+{
+	bool args;
+	bool ttl;
+	bool count;
+	bool timeout;
+	bool interval;
+}			t_bool;
+
+static void	handleSpaceArgs(char *argv, t_bool *flags, int k)
+{
+	if (!ft_isalnum(argv[k]))
+	{
+		printf("invalid argument: %s\n", argv);
+		ftExit(-1);
+	}
+	if (flags->args)
+	{
+		if (!ft_islinenum(argv + 2))
+			badArgument(argv);
+		g_ping.packet_size = ft_atoi(argv);
+	}
+	else if (flags->ttl)
+	{
+		if (!ft_islinenum(argv + 2))
+			badArgument(argv);
+		g_ping.ttl = ft_atoi(argv);
+	}
+	else if (flags->count)
+	{
+		if (!ft_islinenum(argv + 2))
+			badArgument(argv);
+		g_ping.count = ft_atoi(argv);
+	}
+	else if (flags->timeout)
+	{
+		if (!ft_islinenum(argv + 2))
+			badArgument(argv);
+		g_ping.timeout = ft_atoi(argv);
+	}
+	else if (flags->interval)
+	{
+		if (!ft_islinenum(argv + 2))
+			badArgument(argv);
+		g_ping.interval = ft_atoi(argv);
+	}
+	flags->args = false;
+	flags->ttl = false;
+	flags->count = false;
+	flags->timeout = false;
+	flags->interval = false;
+}
+
+static void	init_flags(t_bool *flags)
+{
+	flags->args = false;
+	flags->ttl = false;
+	flags->count = false;
+	flags->timeout = false;
+	flags->interval = false;
+}
+
 int parseInput(int argc, char **argv)
 {
-	bool args = false;
-	bool ttl = false;
-	bool count = false;
-	bool timeout = false;
-	bool interval = false;
+	t_bool	flags;
+	init_flags(&flags);
 	if (argc < 2)
 	{
 		ERROR_PRINTF("usage error: Destination address required\n");
@@ -48,7 +107,7 @@ int parseInput(int argc, char **argv)
 				else if (argv[i][k] == 's')
 				{
 					if (!argv[i][k + 1])
-						args = true;
+						flags.args = true;
 					else
 					{
 						if (!ft_islinenum(argv[i] + 2))
@@ -61,7 +120,7 @@ int parseInput(int argc, char **argv)
 				else if (argv[i][k] == 't')
 				{
 					if (!argv[i][k + 1])
-						ttl = true;
+						flags.ttl = true;
 					else
 					{
 						if (!ft_islinenum(argv[i] + 2))
@@ -74,7 +133,7 @@ int parseInput(int argc, char **argv)
 				else if (argv[i][k] == 'c')
 				{
 					if (!argv[i][k + 1])
-						count = true;
+						flags.count = true;
 					else
 					{
 						if (!ft_islinenum(argv[i] + 2))
@@ -87,7 +146,7 @@ int parseInput(int argc, char **argv)
 				else if (argv[i][k] == 'W')
 				{
 					if (!argv[i][k + 1])
-						timeout = true;
+						flags.timeout = true;
 					else
 					{
 						if (!ft_islinenum(argv[i] + 2))
@@ -100,7 +159,7 @@ int parseInput(int argc, char **argv)
 				else if (argv[i][k] == 'i')
 				{
 					if (!argv[i][k + 1])
-						interval = true;
+						flags.interval = true;
 					else
 					{
 						if (!ft_islinenum(argv[i] + 2))
@@ -120,48 +179,9 @@ int parseInput(int argc, char **argv)
 					k++;
 			}
 		}
-		else if (args || ttl || count || timeout || interval)
+		else if (flags.args || flags.ttl || flags.count || flags.timeout || flags.interval)
 		{
-			if (!ft_isalnum(argv[i][k]))
-			{
-				printf("invalid argument: %s\n", argv[i]);
-				ftExit(-1);
-			}
-			if (args)
-			{
-				if (!ft_islinenum(argv[i] + 2))
-					badArgument(argv[i]);
-				g_ping.packet_size = ft_atoi(argv[i]);
-			}
-			else if (ttl)
-			{
-				if (!ft_islinenum(argv[i] + 2))
-					badArgument(argv[i]);
-				g_ping.ttl = ft_atoi(argv[i]);
-			}
-			else if (count)
-			{
-				if (!ft_islinenum(argv[i] + 2))
-					badArgument(argv[i]);
-				g_ping.count = ft_atoi(argv[i]);
-			}
-			else if (timeout)
-			{
-				if (!ft_islinenum(argv[i] + 2))
-					badArgument(argv[i]);
-				g_ping.timeout = ft_atoi(argv[i]);
-			}
-			else if (interval)
-			{
-				if (!ft_islinenum(argv[i] + 2))
-					badArgument(argv[i]);
-				g_ping.interval = ft_atoi(argv[i]);
-			}
-			args = false;
-			ttl = false;
-			count = false;
-			timeout = false;
-			interval = false;
+			handleSpaceArgs(argv[i], &flags, k);
 		}
 		else if (!g_ping.destination)
 		{
