@@ -1,10 +1,11 @@
 #include "../include/ping.h"
 
+/*
+// loops until signal or out of count in case of -c
+*/
+
 void	ping()
 {
-	// char	tmp[50];
-	// inet_ntop(AF_INET, , tmp, 100);
-	// printf("PING %s (%s)\n", g_ping.destination, tmp);
 	gettimeofday(&g_ping.command_time, NULL);
 	while (g_ping.is_running)
 	{
@@ -24,10 +25,13 @@ void	ping()
 	}
 }
 
+/*
+// Create a socket and set several options for timeout and time to live
+*/
+
 int	socketInit()
 {
 	struct timeval	timeout = {(long)g_ping.timeout, 0};
-	// int	opt_val = 1;
 	if ((g_ping.socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) < 0)
 	{
 		printf("Error: sock file descriptor not received\n");
@@ -53,6 +57,10 @@ int	socketInit()
 	}
 	return(0);
 }
+
+/*
+// check for ip address
+*/
 
 int	dnsLookup()
 {

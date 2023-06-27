@@ -16,6 +16,10 @@ unsigned short checksum(void *b, int len) {
 	return result;
 }
 
+/*
+// calculate every stats about road trip time needed later
+*/
+
 void		rttStats()
 {
 	long double	rtt;
@@ -30,6 +34,10 @@ void		rttStats()
 	g_ping.time.avg += rtt;
 	g_ping.time.sqrd += rtt * rtt;
 }
+
+/*
+// Check for the received packet, look for errors
+*/
 
 void		receivePacket(void)
 {
@@ -96,6 +104,10 @@ struct pckt
 	struct	icmphdr icmp_header;
 	char	msg[MAX_PACKET_SIZE];
 };
+
+/*
+// generate and send packet
+*/
 
 void	sendPacket()
 {

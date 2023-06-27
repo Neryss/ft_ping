@@ -103,16 +103,9 @@ void	catcher(int signum)
 #include <math.h>
 void	displayStats()
 {
-	// struct timeval	end;
-	// double long		time;
 	double long		mdev;
 	double			loss;
 
-	// gettimeofday(&end, NULL);
-	// This needs to be fixed
-	// time = (end.tv_usec - g_ping.command_time.tv_usec) / 1000000.0;
-	// time += (end.tv_sec - g_ping.command_time.tv_sec);
-	// time *= 1000.0;
 	g_ping.time.avg /= g_ping.sent;
 	struct timespec	ts_end;
 	clock_gettime(CLOCK_MONOTONIC, &ts_end);
