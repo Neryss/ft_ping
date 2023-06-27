@@ -52,12 +52,15 @@ void		receivePacket(void)
 	msg.msg_control = control_buffer;
 	msg.msg_controllen = sizeof(control_buffer);
 
+	int	error = 0;
+
 	if ((received_bytes = recvmsg(g_ping.socket, &msg, 0)) < 0) {
 		ERROR_PRINTF("recvmsg\n");
 	}
 	if (received_bytes)
 	{
 		// TODO: check received packets
+		// Convert buffer to IPV4 hdr since it's the first part of it, then ICMP hdr
 		struct ip *ip_hdr = (struct ip*)buffer;
 		if (ip_hdr->ip_p == IPPROTO_ICMP)
 		{
@@ -65,7 +68,8 @@ void		receivePacket(void)
 			int				icmp_offset = ip_hdr->ip_hl * 4;
 
 			content = (struct icmphdr *)(buffer + icmp_offset);
-			printf("ICMP Type: %d\n", content->type);
+			if (content->type == 11)
+				error = 11;
 		}
 		g_ping.received++;
 	}
@@ -79,7 +83,10 @@ void		receivePacket(void)
 		printf("[%d.%06d] ", (int)g_ping.end.tv_sec, (int)g_ping.end.tv_usec);
 	inet_ntop(AF_INET, &addr.sin_addr, tmp, 100);
 	rttStats();
-	printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2Lfms\n", received_bytes, g_ping.destination, tmp, g_ping.seq, g_ping.ttl, g_ping.time.rtt);
+	if (!error)
+		printf("%d bytes from %s (%s): icmp_seq=%d ttl=%d time=%.2Lfms\n", received_bytes, g_ping.destination, tmp, g_ping.seq, g_ping.ttl, g_ping.time.rtt);
+	else if (error == 11)
+		printf("%d bytes from %s (%s): icmp_seq=%d Time to live exceeded\n", received_bytes, g_ping.destination, tmp, g_ping.seq);
 }
 
 struct pckt
