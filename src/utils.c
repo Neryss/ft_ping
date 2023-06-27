@@ -24,6 +24,7 @@ void	initParams()
 	g_ping.flags.t_flag = false;
 	g_ping.seq = 0;
 	g_ping.sent = 0;
+	g_ping.errors = 0;
 	g_ping.received = 0;
 	g_ping.ready = true;
 	g_ping.time.max = 0;
@@ -123,6 +124,9 @@ void	displayStats()
 	// called mdev but it's the standart derivation
 	mdev = sqrt((g_ping.time.sqrd / g_ping.sent) - (g_ping.time.avg * g_ping.time.avg));
 	printf("--- %s ping statistics ---\n", g_ping.destination);
-	printf("%.0f packet transmitted, %.0f received, %.0f%% packet loss, time: %.0Lf ms\n", g_ping.sent, g_ping.received, loss, total_msec);
+	if (!g_ping.errors)
+		printf("%.0f packets transmitted, %.0f received, %.0f%% packet loss, time: %.0Lf ms\n", g_ping.sent, g_ping.received, loss, total_msec);
+	else
+		printf("%.0f packets transmitted, %.0f received, +%.0f errors, %.0f%% packet loss, time: %.0Lf ms\n", g_ping.sent, g_ping.received, g_ping.errors, loss, total_msec);
 	printf("rtt min/avg/max/mdev = %.3Lf/%.3Lf/%.3Lf/%.3Lf ms\n", g_ping.time.min, g_ping.time.avg, g_ping.time.max, mdev);
 }

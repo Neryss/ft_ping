@@ -1,8 +1,6 @@
 #include "../include/ping.h"
 #include <errno.h>
 
-//wtf
-
 unsigned short checksum(void *b, int len) {
 	unsigned short *buf = b;
 	unsigned int sum=0;
@@ -54,13 +52,13 @@ void		receivePacket(void)
 
 	int	error = 0;
 
-	if ((received_bytes = recvmsg(g_ping.socket, &msg, 0)) < 0) {
+	if ((received_bytes = recvmsg(g_ping.socket, &msg, 0)) < 0)
 		ERROR_PRINTF("recvmsg\n");
-	}
 	if (received_bytes)
 	{
 		// TODO: check received packets
 		// Convert buffer to IPV4 hdr since it's the first part of it, then ICMP hdr
+
 		struct ip *ip_hdr = (struct ip*)buffer;
 		if (ip_hdr->ip_p == IPPROTO_ICMP)
 		{
@@ -69,9 +67,13 @@ void		receivePacket(void)
 
 			content = (struct icmphdr *)(buffer + icmp_offset);
 			if (content->type == 11)
+			{
 				error = 11;
+				g_ping.errors++;
+			}
+			else
+				g_ping.received++;
 		}
-		g_ping.received++;
 	}
 	if (gettimeofday(&g_ping.end, NULL) < 0)
 	{

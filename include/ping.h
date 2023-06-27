@@ -86,6 +86,7 @@ typedef struct	s_ping
 	t_time				time;
 	int					seq;
 	double				sent;
+	double				errors;
 	double				received;
 	bool				ready;
 }						t_ping;
