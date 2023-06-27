@@ -56,7 +56,19 @@ void		receivePacket(void)
 		ERROR_PRINTF("recvmsg\n");
 	}
 	if (received_bytes)
+	{
+		// TODO: check received packets
+		struct ip *ip_hdr = (struct ip*)buffer;
+		if (ip_hdr->ip_p == IPPROTO_ICMP)
+		{
+			struct	icmphdr	*content;
+			int				icmp_offset = ip_hdr->ip_hl * 4;
+
+			content = (struct icmphdr *)(buffer + icmp_offset);
+			printf("ICMP Type: %d\n", content->type);
+		}
 		g_ping.received++;
+	}
 	if (gettimeofday(&g_ping.end, NULL) < 0)
 	{
 		ERROR_PRINTF("gettimeofday error\n");

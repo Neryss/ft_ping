@@ -54,7 +54,6 @@ void	printParams()
 	printf("count:       %d\n", g_ping.count);
 }
 
-#include <fcntl.h>
 static int	checkSocket()
 {
 	int	error = 0;
