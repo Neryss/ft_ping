@@ -79,6 +79,7 @@ void		receivePacket(void)
 				error = 11;
 				g_ping.errors++;
 			}
+			// TODO: add general check for multiple errors (generic ones != 0)
 			else
 				g_ping.received++;
 		}

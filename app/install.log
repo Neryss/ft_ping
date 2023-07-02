@@ -1,0 +1,8 @@
+[13:31:30 2023-07-02] FETCHING Version 2.20.3
+[13:31:30 2023-07-02] DOWNLOADING https://github.com/spicetify/spicetify-cli/releases/download/v2.20.3/spicetify-2.20.3-linux-amd64.tar.gz
+[13:31:31 2023-07-02] EXTRACTING /nfs/homes/ckurt/.spicetify/spicetify.tar.gz
+[13:31:32 2023-07-02] SETTING EXECUTABLE PERMISSIONS TO /nfs/homes/ckurt/.spicetify/spicetify
+[13:31:32 2023-07-02] REMOVING /nfs/homes/ckurt/.spicetify/spicetify.tar.gz
+[13:31:32 2023-07-02] spicetify path already set in /nfs/homes/ckurt/.zshrc, continuing...
+[13:31:32 2023-07-02] spicetify v2.20.3 was installed successfully to /nfs/homes/ckurt/.spicetify
+[13:31:32 2023-07-02] Run 'spicetify --help' to get started

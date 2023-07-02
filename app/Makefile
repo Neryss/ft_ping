@@ -35,6 +35,7 @@ $(NAME): $(OBJS) ./libft/libft.a
 
 clean:
 	@rm -f $(OBJS)
+	@rm -f libft.a
 
 fclean: clean
 	@make -C ./libft/ fclean

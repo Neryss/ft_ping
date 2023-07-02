@@ -5,6 +5,13 @@ Re create the `ping` command line in C (with some limitations).
 ## usage
 `./sudo ft_ping <options> <destination>`
 
+Now supports Docker!
+
+- run `docker-compose run --rm --build ping`
+- Inside the container, run `make` then you can use `./ft_ping <options> <destination>`
+
+#
+
 ### Notes
 You can check which option is implemented using the `-h` option, the ones marked as "TODO" are obviously not done.
 
